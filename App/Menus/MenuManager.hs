@@ -3,6 +3,7 @@ module App.Menus.MenuManager where
 import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
 import App.Util.PrintUtil( printTxt )
+import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin)
 
 menuInicial :: IO()
 menuInicial = do
@@ -27,9 +28,6 @@ optionsMenuInicial userChoice
 menuLogin :: IO()
 menuLogin = do
     printTxt "./App/Menus/MenuLogin.txt"
-    hFlush stdout
-    login <- getLine
-    putStr "Insira sua senha: "
-    hFlush stdout
-    senha <- getLine
+    login <- getUsernameLogin
+    senha <- getPasswordLogin
     print (login ++ senha)

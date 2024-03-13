@@ -16,4 +16,3 @@
 ----------------------------------------
 |          Betterboxd  - Login         |
 ----------------------------------------
-Insira seu login (email ou username): 
