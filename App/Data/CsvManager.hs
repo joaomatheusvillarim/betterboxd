@@ -3,6 +3,7 @@ module App.Data.CsvManager where
 import App.Util.StringsOp( concatStrings, splitList )
 import System.IO.Unsafe( unsafeDupablePerformIO )
 
+
 type Matriz = [[String]]
 
 --Converte uma Matriz de Strings para uma única String
@@ -29,4 +30,11 @@ appendCSV path str = appendFile path ("\n" ++ newStr)
 --Retorna a linha i de uma Matriz
 getRow :: Matriz -> Int -> [String]
 getRow mtx i = mtx !! i
+
+--Edita uma linha especifica de uma Matriz
+editMatriz :: Matriz -> Int -> [String] -> Matriz
+editMatriz mat n newValue = x ++ [newValue] ++ ts
+    where   (x, y)  = splitAt n mat
+            ts      = tail y
+
 

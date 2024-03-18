@@ -17,7 +17,7 @@ menuInicial = do
 optionsMenuInicial :: String -> IO()
 optionsMenuInicial userChoice 
     | userChoice == "E" || userChoice == "e"    = menuLogin
-    | userChoice == "C" || userChoice == "c"    = print ""
+    | userChoice == "C" || userChoice == "c"    = cadastraUser
     | userChoice == "B" || userChoice == "b"    = print ""
     | userChoice == "S" || userChoice == "s"    = print ""
     | otherwise = do
@@ -30,4 +30,16 @@ menuLogin = do
     printTxt "./App/Menus/MenuLogin.txt"
     login <- getUsernameLogin
     senha <- getPasswordLogin
+
     print (login ++ senha)
+
+menuCadastro :: IO()
+menuCadastro = do
+    printTxt "./App/Menus/MenuLogin.txt"
+    username <- getUsernameCadastro
+    name <- getNameCadastro
+    bio <- getBioCadastro
+    password <- getPasswordCadastro
+    
+    print(username + name +  bio + senha)
+

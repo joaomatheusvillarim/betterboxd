@@ -1,4 +1,5 @@
 module App.Util.StringsOp where
+import System.IO
 
 --Concatena uma lista de Strings, utilizando um conectivo informado
 concatStrings :: [String] -> String -> String
@@ -17,3 +18,13 @@ splitList :: Char -> [String] -> [[String]]
 splitList _ []      = []
 splitList c (x:[])  = [splitOn c  x]
 splitList c (x:xs) = splitOn c  x : splitList c xs
+
+hGetContents2 :: Handle -> IO String
+hGetContents2 h = do
+  eof <- hIsEOF h
+  if eof
+    then
+      return []
+    else do
+      c <- hGetChar h
+      fmap (c:) $ hGetContents2 h

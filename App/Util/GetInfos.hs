@@ -1,12 +1,17 @@
 module App.Util.GetInfos where
 
 import System.IO ( hFlush, stdout )
+import App.Controllers.UserController( hasUsername )
 
 getUsernameCadastro :: IO String
 getUsernameCadastro = do
     putStr "Digite o seu username: "
     hFlush stdout
     username <- getLine
+    
+    if hasUsername username then
+        putStrLn "\nAviso: O nome do usuário já está em uso."
+        getUsernameCadastro
 
     if length username > 18 then do
         putStrLn "\nAviso: O nome do usuário deve ter no máximo 18 caracteres."
