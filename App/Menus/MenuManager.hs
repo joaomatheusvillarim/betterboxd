@@ -3,7 +3,8 @@ module App.Menus.MenuManager where
 import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
 import App.Util.PrintUtil( printTxt )
-import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin)
+import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro)
+import App.Betterboxd ( cadastraUsuario )
 
 menuInicial :: IO()
 menuInicial = do
@@ -17,7 +18,7 @@ menuInicial = do
 optionsMenuInicial :: String -> IO()
 optionsMenuInicial userChoice 
     | userChoice == "E" || userChoice == "e"    = menuLogin
-    | userChoice == "C" || userChoice == "c"    = cadastraUser
+    | userChoice == "C" || userChoice == "c"    = menuCadastro
     | userChoice == "B" || userChoice == "b"    = print ""
     | userChoice == "S" || userChoice == "s"    = print ""
     | otherwise = do
@@ -36,10 +37,11 @@ menuLogin = do
 menuCadastro :: IO()
 menuCadastro = do
     printTxt "./App/Menus/MenuLogin.txt"
-    username <- getUsernameCadastro
-    name <- getNameCadastro
+    user <- getUsernameCadastro
+    nome <- getNameCadastro
     bio <- getBioCadastro
-    password <- getPasswordCadastro
+    senha <- getPasswordCadastro
+
+    cadastraUsuario nome user bio senha
     
-    print(username + name +  bio + senha)
 

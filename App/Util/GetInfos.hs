@@ -5,19 +5,39 @@ import App.Controllers.UserController( hasUsername )
 
 getUsernameCadastro :: IO String
 getUsernameCadastro = do
-    putStr "Digite o seu username: "
+    putStr "\nDigite o seu username: "
     hFlush stdout
     username <- getLine
     
-    if hasUsername username then
+    if hasUsername username then do
         putStrLn "\nAviso: O nome do usuário já está em uso."
         getUsernameCadastro
 
-    if length username > 18 then do
+    else if length username > 18 then do
         putStrLn "\nAviso: O nome do usuário deve ter no máximo 18 caracteres."
         getUsernameCadastro
 
     else return username
+
+getNameCadastro :: IO String
+getNameCadastro = do
+    putStr "Digite o seu nome: "
+    hFlush stdout
+    name <- getLine
+
+    if length name > 18 then do
+        putStrLn "\nAviso: O seu nome deve ter no máximo 18 caracteres."
+        getNameCadastro
+
+    else return name
+
+getBioCadastro :: IO String
+getBioCadastro = do
+    putStr "Digite a sua bio: "
+    hFlush stdout
+    bio <- getLine
+    
+    return bio
 
 getPasswordCadastro :: IO String
 getPasswordCadastro = do
