@@ -4,7 +4,7 @@ import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro)
-import App.Betterboxd ( cadastraUsuario )
+import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin )
 
 menuInicial :: IO()
 menuInicial = do
@@ -32,7 +32,16 @@ menuLogin = do
     login <- getUsernameLogin
     senha <- getPasswordLogin
 
-    print (login ++ senha)
+    if isLoginValid login senha then do
+        doLogin login
+        --MENU PRINCIPAL AQ
+    
+    else do
+        putStrLn "\nLogin Inválido!"
+        threadDelay 700000
+        menuInicial
+
+
 
 menuCadastro :: IO()
 menuCadastro = do
