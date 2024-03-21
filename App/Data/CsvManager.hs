@@ -1,3 +1,4 @@
+--CsvManeger
 module App.Data.CsvManager where
 
 import App.Util.StringsOp( concatStrings, splitList )
