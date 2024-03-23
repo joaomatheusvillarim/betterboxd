@@ -2,7 +2,8 @@ module App.Data.CsvManager where
 
 import App.Util.StringsOp( concatStrings, splitList )
 import System.IO.Unsafe( unsafeDupablePerformIO )
-
+import System.Environment
+import System.IO
 
 type Matriz = [[String]]
 
@@ -19,8 +20,15 @@ writeCSV path matriz = writeFile path ( matrizToString matriz )
 --Le um arquivo CSV, retornando uma Matriz
 readCSV :: FilePath -> Matriz
 readCSV path = do
-    let content = unsafeDupablePerformIO (readFile path)
+    let content = unsafeDupablePerformIO (readUTF8 path)
     splitList ';' (lines content)
+
+readUTF8 :: FilePath -> IO String
+readUTF8 path = do
+    handle <- openFile path ReadMode
+    hSetEncoding handle utf8
+    hGetContents handle
+
 
 --Adiciona uma nova Linha a um arquivo CSV
 appendCSV :: FilePath -> [String] -> IO()
