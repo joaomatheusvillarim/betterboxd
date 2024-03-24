@@ -19,7 +19,6 @@ optionsMenuInicial :: String -> IO()
 optionsMenuInicial userChoice 
     | userChoice == "E" || userChoice == "e"    = menuLogin
     | userChoice == "C" || userChoice == "c"    = menuCadastro
-    | userChoice == "B" || userChoice == "b"    = menuBusca1
     | userChoice == "S" || userChoice == "s"    = print ""
     | otherwise = do
         putStrLn "\nOpção Inválida!"

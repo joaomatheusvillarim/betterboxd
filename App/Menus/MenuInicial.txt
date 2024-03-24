@@ -18,6 +18,5 @@
 ----------------------------------------
 (E)NTRAR em sua conta Betterboxd
 (C)RIAR nova conta Betterboxd
-(B)USCAR filme, lista, ou perfil
 (S)AIR
 
