@@ -1,15 +1,3 @@
-********************************************************************************
-                                                                              
-                            Informações do Filme                              
-                                                                             
-********************************************************************************
- Título:        The Shawshank Redemption                                      
- Rating:        9.3                                                           
- Ano:           1994                                                          
- Atores:        Tim Robbins, Morgan Freeman                                   
- Diretor:       Frank Darabont                                                
-********************************************************************************
- Comentários:                                                                 
- Victor - ★★★★★ Um filme incrível que vai te emocionar do início ao fim!            
- Pedro - ★★★★☆ As atuações são fenomenais e a história é cativante.                           
-********************************************************************************
+(C)OMENTAR e avaliar filme
+(A)LTERAR comentário
+(V)OLTAR ao menu principal

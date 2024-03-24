@@ -2,10 +2,14 @@ module App.Betterboxd where
 
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors,comentarios, createMovie)
 import App.Models.User ( User, createUser, idt, user, nome, bio, senha )
+import App.Util.StringsOp (concatStrings)
 import App.Controllers.MovieController (getMovies, getMoviesByGenre, getMoviesByTittle, appendComment)
 import App.Controllers.UserController (getUsers, appendUser, getUserLogged, getUserBy, hasUsername, getNextIdt, stringToUser)
 import App.Data.CsvManager ( writeCSV )
 import qualified Data.Maybe
+import System.IO
+
+{-# LANGUAGE OverloadedStrings #-}
 
 cadastraUsuario :: String -> String -> String -> String -> IO()
 cadastraUsuario nome user bio senha = appendUser [nome, user, bio, senha]
@@ -19,6 +23,9 @@ doLogin userName = do
     let usuario = Data.Maybe.fromJust $ getUserBy (getUsers 0) user userName
     writeCSV "./App/Data/Temp.csv" [[idt usuario]]
 
+
+searchMovieByID :: String -> Movie
+searchMovieByID str = (getMovies 0) !! ((read str) - 1)
 
 searchMovieByTittle :: String -> [Movie]
 searchMovieByTittle str = take 10 (getMoviesByTittle str (getMovies 0))
@@ -38,9 +45,10 @@ movieAtIndex _ [] = Nothing
 movieAtIndex index (movie:rest)
     | index == 1 = Just movie
     | otherwise = movieAtIndex (index - 1) rest
---
+
 printMovieInfo :: Movie -> IO ()
 printMovieInfo movie = do
+    putStrLn "\ESC[2J"
     putStrLn $ replicate 80 '*'
     putStrLn ""
     putStrLn $ replicate 30 ' ' ++ "Informações do Filme"
@@ -49,11 +57,10 @@ printMovieInfo movie = do
     putStrLn $ " Título:        " ++ tittle movie
     putStrLn $ " Rating:        " ++ show (rating movie)
     putStrLn $ " Ano:           " ++ show (year movie)
-    putStrLn $ " Atores:        " ++ unwords (actors movie)
-    putStrLn $ " Diretor:       " ++ unwords (directors movie)
+    putStrLn $ " Atores:        " ++ concatStrings (actors movie) ", "
+    putStrLn $ " Diretor:       " ++ concatStrings (directors movie) ", "
     putStrLn $ replicate 80 '*'
     putStrLn " Comentários:"
-    putStrLn $ replicate 80 '*'
     if null (comentarios movie)
         then putStrLn "  - Nenhum comentário disponível."
         else mapM_ (\(usuario, avaliacao, comentario) ->

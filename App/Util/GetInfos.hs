@@ -8,7 +8,7 @@ getUsernameCadastro = do
     putStr "\nDigite o seu username: "
     hFlush stdout
     username <- getLine
-    
+
     if hasUsername username then do
         putStrLn "\nAviso: O nome do usuário já está em uso."
         getUsernameCadastro
@@ -35,9 +35,7 @@ getBioCadastro :: IO String
 getBioCadastro = do
     putStr "Digite a sua bio: "
     hFlush stdout
-    bio <- getLine
-    
-    return bio
+    getLine
 
 getPasswordCadastro :: IO String
 getPasswordCadastro = do
@@ -60,5 +58,22 @@ getUsernameLogin = do
 getPasswordLogin :: IO String
 getPasswordLogin = do
     putStr "Digite a sua senha: "
+    hFlush stdout
+    getLine
+
+getNumberStars :: IO Int
+getNumberStars = do
+    putStr "De 0 a 5 estrelas, como você avalia o filme? "
+    hFlush stdout
+    n <- getLine
+    if ((read n) < 0 || (read n) > 5) then do
+        putStrLn "\nAviso: Quantidade de estrelas inválidas"
+        getNumberStars
+
+    else return (read n)
+    
+getComentario :: IO String
+getComentario = do
+    putStr "Insira seu comentário: "
     hFlush stdout
     getLine
