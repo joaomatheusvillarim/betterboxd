@@ -9,8 +9,6 @@ import App.Data.CsvManager ( writeCSV )
 import qualified Data.Maybe
 import System.IO
 
-{-# LANGUAGE OverloadedStrings #-}
-
 cadastraUsuario :: String -> String -> String -> String -> IO()
 cadastraUsuario nome user bio senha = appendUser [nome, user, bio, senha]
 
