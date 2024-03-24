@@ -16,7 +16,7 @@ menuInicial = do
 
 
 optionsMenuInicial :: String -> IO()
-optionsMenuInicial userChoice 
+optionsMenuInicial userChoice
     | userChoice == "E" || userChoice == "e"    = menuLogin
     | userChoice == "C" || userChoice == "c"    = menuCadastro
     | userChoice == "S" || userChoice == "s"    = print ""
@@ -34,7 +34,7 @@ menuLogin = do
     if isLoginValid login senha then do
         doLogin login
         menuPrincipal
-    
+
     else do
         putStrLn "\nLogin Inválido!"
         threadDelay 700000
@@ -98,10 +98,17 @@ menuBuscaFilme1 = do
 
 menuBuscaFilme2 :: String -> IO()
 menuBuscaFilme2 str = do
-    let filmes = showMovies (searchMovieByTittle str) 1
+    let filmes = searchMovieByTittle str
+    let filmesSTR = showMovies filmes 1
     printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
-    putStrLn filmes
+    putStrLn filmesSTR
     putStr "\nId: "
     userChoice <- getLine
-    --JOIN FILME
+    --JOIN filmes !! ((read userChoice) -1)
     putStrLn userChoice
+    where
+        getId :: IO String
+        getId = do
+            putStr "\nId: "
+            getLine
+

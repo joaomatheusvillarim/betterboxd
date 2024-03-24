@@ -3,8 +3,9 @@ module App.Controllers.MovieController where
 import Data.List
 import Data.Char
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors, createMovie, comentarios)
-import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz)
-import App.Util.StringsOp (splitOn, stringToTuples)
+import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarIndice)
+import App.Util.StringsOp (splitOn, stringToTuples, hGetContents2, concatStrings)
+import System.IO
 
 merge :: [Movie] -> [Movie] -> [Movie]
 merge [] ys         = ys
@@ -59,3 +60,25 @@ getMoviesByTittle str (x:[])
 getMoviesByTittle str (x:xs)
     | isInfixOf (map toLower str) (map toLower (tittle x))      = x : (getMoviesByTittle str xs)
     | otherwise                                                 = getMoviesByTittle str xs
+
+
+appendComment :: String -> Int -> String -> Movie -> IO()
+appendComment idUser nStars comment mvie = do
+    let updatedComments = "[" ++ commentToString ((idUser, nStars, comment) : (comentarios mvie)) ++ "]"
+    let newLine = idtM mvie ++ ";" ++ tittle mvie ++ ";" ++ show (rating mvie) ++ ";[" ++ (concatStrings (genres mvie) ",") ++ "];" ++ show (year mvie) ++ ";[" ++ (concatStrings (actors mvie) ",") ++ "]" ++ ";[" ++ (concatStrings (directors mvie) ",") ++ "];" ++ updatedComments
+    handle <- openFile "./App/Data/Movies.csv" ReadWriteMode
+    hSetEncoding handle utf8
+    contents <- hGetContents2 handle
+    let linhas = lines contents
+    let newLines = editarIndice linhas ((read (idtM mvie)) - 1)  newLine
+    let newContent = concatStrings newLines "\n"
+    hSeek handle AbsoluteSeek 0  -- Posiciona o cursor no início do arquivo
+    hPutStr handle newContent
+    hClose handle
+
+
+
+commentToString :: [(String, Int, String)] -> String
+commentToString []              = ""
+commentToString [(x, y, z)]     = "(" ++ x ++ "-" ++ show y ++ "-" ++ z ++ ")"
+commentToString ((x, y, z):xs)  = "(" ++ x ++ "-" ++ show y ++ "-" ++ z ++ ")" ++ "@" ++ commentToString xs

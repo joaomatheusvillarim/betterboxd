@@ -2,7 +2,7 @@ module App.Betterboxd where
 
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors,comentarios, createMovie)
 import App.Models.User ( User, createUser, idt, user, nome, bio, senha )
-import App.Controllers.MovieController (getMovies, getMoviesByGenre, getMoviesByTittle)
+import App.Controllers.MovieController (getMovies, getMoviesByGenre, getMoviesByTittle, appendComment)
 import App.Controllers.UserController (getUsers, appendUser, getUserLogged, getUserBy, hasUsername, getNextIdt, stringToUser)
 import App.Data.CsvManager ( writeCSV )
 import qualified Data.Maybe
@@ -28,3 +28,6 @@ showMovies [] _     = ""
 showMovies (x:[]) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x)
 showMovies (x:xs) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x) ++ "\n" ++ showMovies xs (n+1)
 
+commentMovie :: User -> Int -> String -> Movie -> IO()
+commentMovie usr nStar comment mvie = do
+    appendComment (idt usr) nStar comment mvie

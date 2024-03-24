@@ -45,4 +45,8 @@ editMatriz mat n newValue = x ++ [newValue] ++ ts
     where   (x, y)  = splitAt n mat
             ts      = tail y
 
-
+editarIndice :: [String] -> Int -> String -> [String]
+editarIndice [] _ _ = []
+editarIndice (x:xs) indice novoConteudo
+    | indice == 0 = novoConteudo : xs
+    | otherwise = x : editarIndice xs (indice - 1) novoConteudo

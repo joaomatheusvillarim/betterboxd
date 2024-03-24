@@ -27,6 +27,7 @@ getUsers n =  matrizToUser ( readCSV "./App/Data/Users.csv" )
 appendUser :: [String] ->  IO()
 appendUser [user, name, bio, senha] = do
     handle <- openFile "./App/Data/Users.csv" ReadWriteMode
+    hSetEncoding handle utf8
     contents <- hGetContents2 handle
     let idt = lines contents
     hSeek handle SeekFromEnd 0
