@@ -19,10 +19,18 @@ splitList _ []      = []
 splitList c (x:[])  = [splitOn c  x]
 splitList c (x:xs) = splitOn c  x : splitList c xs
 
--- "[(1-Oi)@(2-Ola)]" -> [("1", "Oi"), ("2", "Ola")]
-stringToTuples :: String -> [(String, String)]
+-- "[(1-5-Oi)@(2-3-Ola)]" -> [("1", 5, "Oi"), ("2", 3, "Ola")]
+stringToTuples :: String -> [(String, Int, String)]
 stringToTuples str = listaToTuples lista
   where lista = splitOn '@' (init (tail str))
+
+listaToTuples :: [String] -> [(String, Int, String)]
+listaToTuples []      = []
+listaToTuples [x]  = [(head lista, read (lista !! 1),last lista)]
+  where lista = splitOn '-' (init (tail x))
+listaToTuples(x:xs) = (head lista, read (lista !! 1), last lista) : listaToTuples xs
+  where lista = splitOn '-' (init (tail x))
+
 
 hGetContents2 :: Handle -> IO String
 hGetContents2 h = do
@@ -33,10 +41,3 @@ hGetContents2 h = do
     else do
       c <- hGetChar h
       fmap (c:) $ hGetContents2 h
-
-listaToTuples :: [String] -> [(String, String)]
-listaToTuples []      = []
-listaToTuples [x]  = [(head lista, last lista)]
-  where lista = splitOn '-' (init (tail x))
-listaToTuples(x:xs) = (head lista, last lista) : listaToTuples xs
-  where lista = splitOn '-' (init (tail x))

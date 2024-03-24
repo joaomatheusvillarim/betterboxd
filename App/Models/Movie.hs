@@ -7,11 +7,11 @@ data Movie = Movie  { idtM :: String
                     , year :: Int
                     , actors :: [String]
                     , directors :: [String]
-                    , comentarios :: [(String, String)]
+                    , comentarios :: [(String, Int, String)]
                     } deriving (Show)
 
 
-createMovie :: String -> String -> Int -> [String] -> Int -> [String] -> [String] -> [(String, String)] -> Movie
+createMovie :: String -> String -> Int -> [String] -> Int -> [String] -> [String] -> [(String, Int, String)] -> Movie
 createMovie idt tittle rating genres year actors directors av = Movie  {
                                                                       idtM = idt
                                                                     , tittle = tittle
