@@ -31,3 +31,36 @@ showMovies (x:xs) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x) +
 commentMovie :: User -> Int -> String -> Movie -> IO()
 commentMovie usr nStar comment mvie = do
     appendComment (idt usr) nStar comment mvie
+
+-- pega a lista de filmes e pega do index do
+movieAtIndex :: Int -> [Movie] -> Maybe Movie
+movieAtIndex _ [] = Nothing
+movieAtIndex index (movie:rest)
+    | index == 1 = Just movie
+    | otherwise = movieAtIndex (index - 1) rest
+--
+printMovieInfo :: Movie -> IO ()
+printMovieInfo movie = do
+    putStrLn $ replicate 80 '*'
+    putStrLn ""
+    putStrLn $ replicate 30 ' ' ++ "Informações do Filme"
+    putStrLn ""
+    putStrLn $ replicate 80 '*'
+    putStrLn $ " Título:        " ++ tittle movie
+    putStrLn $ " Rating:        " ++ show (rating movie)
+    putStrLn $ " Ano:           " ++ show (year movie)
+    putStrLn $ " Atores:        " ++ unwords (actors movie)
+    putStrLn $ " Diretor:       " ++ unwords (directors movie)
+    putStrLn $ replicate 80 '*'
+    putStrLn " Comentários:"
+    putStrLn $ replicate 80 '*'
+    if null (comentarios movie)
+        then putStrLn "  - Nenhum comentário disponível."
+        else mapM_ (\(usuario, avaliacao, comentario) ->
+                putStrLn $ " " ++ usuario ++ " - " ++ stars avaliacao ++ " " ++ comentario)
+              (comentarios movie)
+    putStrLn $ replicate 80 '*'
+    where
+        stars :: Int -> String
+        stars n = replicate n '★' ++ replicate (5 - n) '☆'
+

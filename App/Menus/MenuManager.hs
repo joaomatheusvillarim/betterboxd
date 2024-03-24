@@ -4,7 +4,7 @@ import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro)
-import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies)
+import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo)
 
 menuInicial :: IO()
 menuInicial = do
@@ -105,10 +105,13 @@ menuBuscaFilme2 str = do
     putStr "\nId: "
     userChoice <- getLine
     --JOIN filmes !! ((read userChoice) -1)
-    putStrLn userChoice
+    let indice = read userChoice :: Int --
+    case movieAtIndex indice filmes of
+        Just movie -> printMovieInfo movie
+        Nothing -> putStrLn "Índice inválido."
+    putStr "\n"
     where
         getId :: IO String
         getId = do
             putStr "\nId: "
             getLine
-
