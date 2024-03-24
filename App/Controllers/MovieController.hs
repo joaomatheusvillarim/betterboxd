@@ -2,9 +2,9 @@ module App.Controllers.MovieController where
 
 import Data.List
 import Data.Char
-import App.Models.Movie (Movie, idt, tittle, rating, genres, year, actors, directors, createMovie)
+import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors, createMovie, comentarios)
 import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz)
-import App.Util.StringsOp (splitOn)
+import App.Util.StringsOp (splitOn, stringToTuples)
 
 merge :: [Movie] -> [Movie] -> [Movie]
 merge [] ys         = ys
@@ -24,7 +24,7 @@ msort  xs = merge (msort left) (msort right)
             where (left,right) = halve xs
 
 stringToMovie :: [String] -> Movie
-stringToMovie [idt, tittle, rating, genres, year, actors, directors] = createMovie idt tittle (read rating) (stringToList genres) (read year) (stringToList actors) (stringToList directors)
+stringToMovie [idtM, tittle, rating, genres, year, actors, directors, comentarios] = createMovie idtM tittle (read rating) (stringToList genres) (read year) (stringToList actors) (stringToList directors) (stringToTuples comentarios)
 
 matrizToMovie :: Matriz -> [Movie]
 matrizToMovie (x:[]) = [stringToMovie x]

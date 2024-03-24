@@ -1,22 +1,24 @@
 module App.Models.Movie where
 
-data Movie = Movie  { idt :: String
+data Movie = Movie  { idtM :: String
                     , tittle :: String
                     , rating :: Int
                     , genres :: [String]
                     , year :: Int
                     , actors :: [String]
                     , directors :: [String]
+                    , comentarios :: [(String, String)]
                     } deriving (Show)
 
 
-createMovie :: String -> String -> Int -> [String] -> Int -> [String] -> [String] -> Movie
-createMovie idt tittle rating genres year actors directors = Movie  {
-                                                                      idt = idt
+createMovie :: String -> String -> Int -> [String] -> Int -> [String] -> [String] -> [(String, String)] -> Movie
+createMovie idt tittle rating genres year actors directors av = Movie  {
+                                                                      idtM = idt
                                                                     , tittle = tittle
                                                                     , rating = rating
                                                                     , genres = genres
                                                                     , year = year
                                                                     , actors = actors
                                                                     , directors = directors
+                                                                    , comentarios = av
                                                                     }
