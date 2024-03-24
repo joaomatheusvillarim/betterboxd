@@ -62,10 +62,10 @@ printMovieInfo movie = do
     if null (comentarios movie)
         then putStrLn "  - Nenhum comentário disponível."
         else mapM_ (\(usuario, avaliacao, comentario) ->
-                putStrLn $ " " ++ usuario ++ " - " ++ stars avaliacao ++ " " ++ comentario)
+                putStrLn $ " " ++ nome (Data.Maybe.fromJust (getUserBy (getUsers 0) idt usuario)) ++ " - " ++ stars avaliacao ++ " " ++ comentario)
               (comentarios movie)
     putStrLn $ replicate 80 '*'
     where
         stars :: Int -> String
-        stars n = replicate n '★' ++ replicate (5 - n) '☆'
+        stars n = replicate n '*' ++ replicate (5 - n) '°'
 
