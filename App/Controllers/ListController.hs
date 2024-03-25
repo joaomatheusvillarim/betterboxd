@@ -12,9 +12,6 @@ addToMovieList list movie = list { movies = movie : movies list }
 removeFromMovieList :: MovieList -> Movie -> MovieList
 removeFromMovieList list movie = list { movies = filter (/= movie) (movies list) }
 
-createMovieList :: String -> [Movie] -> MovieList
-createMovieList name movies = MovieList { listName = name, movies = movies }
-
 getMoviesFromList :: MovieList -> [Movie]
 getMoviesFromList list = movies list
 

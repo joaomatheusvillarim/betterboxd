@@ -8,7 +8,7 @@ import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameL
 import App.Models.Movie (Movie, idtM, comentarios)
 import App.Models.User (User, idt)
 import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment)
-import App.Controllers.ListController( addToMovieList, removeFromMovieList,  )
+import App.Controllers.ListController(addToMovieList, removeFromMovieList, createMovieList, getMoviesFromList, favoritesList, saveMovieList, loadMovieLists, getMovieById, allMovies)
 
 
 
@@ -208,3 +208,20 @@ visualizarTodasListas = do
     allLists <- loadMovieLists
     mapM_ (\list -> putStrLn (listName list)) allLists
 
+adicionarFilmeLista :: MovieList -> IO ()
+adicionarFilmeLista movieList = do
+    putStrLn "Digite o ID do filme que deseja adicionar à lista:"
+    idStr <- getLine
+    let id = read idStr :: Int
+    movies <- allMovies
+    let maybeMovie = getMovieById id movies
+
+    case maybeMovie of
+        Just movie -> do
+            let updatedList = addToMovieList movieList movie
+            saveMovieList updatedList
+            putStrLn "Filme adicionado à lista com sucesso!"
+        Nothing -> do
+            putStrLn "Filme não encontrado."
+
+            
