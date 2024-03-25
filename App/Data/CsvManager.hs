@@ -1,6 +1,7 @@
 module App.Data.CsvManager where
 
 import App.Util.StringsOp( concatStrings, splitList )
+import Control.Exception
 import System.IO.Unsafe( unsafeDupablePerformIO )
 import System.Environment
 import System.IO
@@ -23,11 +24,22 @@ readCSV path = do
     let content = unsafeDupablePerformIO (readUTF8 path)
     splitList ';' (lines content)
 
-readUTF8 :: FilePath -> IO String
+{- readUTF8 :: FilePath -> IO String
 readUTF8 path = do
     handle <- openFile path ReadMode
     hSetEncoding handle utf8
-    hGetContents handle
+    hGetContents handle -}
+
+readUTF8 :: FilePath -> IO String
+readUTF8 path = bracket
+    (openFile path ReadMode)
+    (\handle -> hClose handle)
+    (\handle -> do
+        hSetEncoding handle utf8
+        contents <- hGetContents handle
+        evaluate (length contents)  -- Avalia todo o conteúdo
+        return contents
+    )
 
 
 --Adiciona uma nova Linha a um arquivo CSV
