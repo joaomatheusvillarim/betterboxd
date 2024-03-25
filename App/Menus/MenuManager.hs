@@ -8,6 +8,9 @@ import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameL
 import App.Models.Movie (Movie, idtM, comentarios)
 import App.Models.User (User, idt)
 import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment)
+import App.Controllers.ListController( addToMovieList, removeFromMovieList,  )
+
+
 
 menuInicial :: IO()
 menuInicial = do
@@ -173,3 +176,35 @@ menuComentarioChange mvie = do
         printMovieInfo (searchMovieByID (idtM mvie))
         menuFilme (searchMovieByID (idtM mvie))
     where userLogged = getUserLogged 0
+
+menuListaFilmes :: MovieList -> IO ()
+menuListaFilmes movieList = do
+    putStrLn "Lista de Filmes:"
+    putStrLn "(T)odas suas Listas de Filmes"
+    putStrLn "(A)dicionar Filme à Lista"
+    putStrLn "(R)emover Filme da Lista"
+    putStrLn "(F)avoritos"
+    putStrLn "(V)oltar ao Menu Principal"
+    putStr "Selecione uma opção: "
+    hFlush stdout
+    userChoice <- getLine
+    optionsMenuListaFilmes userChoice movieList
+
+optionsMenuListaFilmes :: String -> MovieList -> IO ()
+optionsMenuListaFilmes userChoice movieList
+    | userChoice == "T" || userChoice == "t"    = visualizarTodasListas movieList
+    | userChoice == "A" || userChoice == "a"    = adicionarFilmeLista movieList
+    | userChoice == "R" || userChoice == "r"    = removerFilmeLista movieList
+    | userChoice == "F" || userChoice == "f"    = visualizarFavoritos
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
+    | otherwise = do
+        putStrLn "\nOpção Inválida!"
+        threadDelay 700000
+        menuListaFilmes movieList
+
+visualizarTodasListas :: IO ()
+visualizarTodasListas = do
+    putStrLn "Todas as Listas de Filmes:"
+    allLists <- loadMovieLists
+    mapM_ (\list -> putStrLn (listName list)) allLists
+
