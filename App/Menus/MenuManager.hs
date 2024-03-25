@@ -5,8 +5,9 @@ import System.IO ( hFlush, stdout )
 import App.Controllers.UserController (getUserLogged)
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro, getNumberStars, getComentario)
-import App.Models.Movie (Movie, idtM)
-import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID)
+import App.Models.Movie (Movie, idtM, comentarios)
+import App.Models.User (User, idt)
+import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment)
 
 menuInicial :: IO()
 menuInicial = do
@@ -134,8 +135,8 @@ menuFilme mvie = do
 optionsMenuFilme :: String -> Movie -> IO()
 optionsMenuFilme userChoice mvie
     | userChoice == "C" || userChoice == "c"    = menuComentario mvie
-    | userChoice == "A" || userChoice == "a"    = print ""
-    | userChoice == "V" || userChoice == "v"    = print ""
+    | userChoice == "A" || userChoice == "a"    = menuComentarioChange mvie
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
@@ -144,12 +145,31 @@ optionsMenuFilme userChoice mvie
 
 menuComentario :: Movie -> IO()
 menuComentario mvie = do
-    nStars <- getNumberStars
-    coment <- getComentario
-    commentMovie (getUserLogged 0) nStars coment mvie
-    printMovieInfo (searchMovieByID (idtM mvie))
-    menuFilme (searchMovieByID (idtM mvie))
+    if verificaComentUnico (idt userLogged) (comentarios mvie) then do
+        nStars <- getNumberStars
+        coment <- getComentario
+        commentMovie userLogged nStars coment mvie
+        printMovieInfo (searchMovieByID (idtM mvie))
+        menuFilme (searchMovieByID (idtM mvie))
+    else do
+        putStrLn "\nVocê já avaliou este filme!"
+        threadDelay 1400000
+        printMovieInfo mvie
+        menuFilme mvie
+    where userLogged = getUserLogged 0
 
+menuComentarioChange :: Movie -> IO()
+menuComentarioChange mvie = do
+    if verificaComentUnico (idt userLogged) (comentarios mvie) then do
+        putStrLn "\nVocê ainda não avaliou este filme!"
+        threadDelay 1400000
+        printMovieInfo mvie
+        menuFilme mvie
 
-
-    
+    else do
+        nStars <- getNumberStars
+        coment <- getComentario
+        changeComment mvie (idt userLogged, nStars, coment)
+        printMovieInfo (searchMovieByID (idtM mvie))
+        menuFilme (searchMovieByID (idtM mvie))
+    where userLogged = getUserLogged 0

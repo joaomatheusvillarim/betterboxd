@@ -3,7 +3,7 @@ module App.Betterboxd where
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors,comentarios, createMovie)
 import App.Models.User ( User, createUser, idt, user, nome, bio, senha )
 import App.Util.StringsOp (concatStrings)
-import App.Controllers.MovieController (getMovies, getMoviesByGenre, getMoviesByTittle, appendComment)
+import App.Controllers.MovieController (getMovies, getMoviesByGenre, getMoviesByTittle, appendComment, updteComment, editComment)
 import App.Controllers.UserController (getUsers, appendUser, getUserLogged, getUserBy, hasUsername, getNextIdt, stringToUser)
 import App.Data.CsvManager ( writeCSV )
 import qualified Data.Maybe
@@ -37,6 +37,10 @@ commentMovie :: User -> Int -> String -> Movie -> IO()
 commentMovie usr nStar comment mvie = do
     appendComment (idt usr) nStar comment mvie
 
+changeComment :: Movie -> (String, Int, String) -> IO()
+changeComment mvie (a, b, c) = updteComment novosComment mvie
+    where novosComment = editComment (comentarios mvie) (a,b,c)
+
 -- pega a lista de filmes e pega do index do
 movieAtIndex :: Int -> [Movie] -> Maybe Movie
 movieAtIndex _ [] = Nothing
@@ -68,4 +72,12 @@ printMovieInfo movie = do
     where
         stars :: Int -> String
         stars n = replicate n '*' ++ replicate (5 - n) '°'
+
+
+verificaComentUnico :: String -> [(String, Int, String)] -> Bool
+verificaComentUnico _ []            = True
+verificaComentUnico str [(x, y, z)] = str /= x
+verificaComentUnico str ((x, y, z):xs)
+    | str == x      = False
+    | otherwise     = verificaComentUnico str xs
 

@@ -72,11 +72,34 @@ appendComment idUser nStars comment mvie = do
     let linhas = lines contents
     let newLines = editarIndice linhas ((read (idtM mvie)) - 1)  newLine
     let newContent = concatStrings newLines "\n"
+    hSetFileSize handle 0  
     hSeek handle AbsoluteSeek 0  -- Posiciona o cursor no início do arquivo
     hPutStr handle newContent
     hClose handle
 
+updteComment :: [(String, Int, String)] -> Movie -> IO()
+updteComment newComments mvie = do
+    let updatedComments = "[" ++ commentToString (newComments) ++ "]"
+    let newLine = idtM mvie ++ ";" ++ tittle mvie ++ ";" ++ show (rating mvie) ++ ";[" ++ (concatStrings (genres mvie) ",") ++ "];" ++ show (year mvie) ++ ";[" ++ (concatStrings (actors mvie) ",") ++ "]" ++ ";[" ++ (concatStrings (directors mvie) ",") ++ "];" ++ updatedComments
+    handle <- openFile "./App/Data/Movies.csv" ReadWriteMode
+    hSetEncoding handle utf8
+    contents <- hGetContents2 handle
+    let linhas = lines contents
+    let newLines = editarIndice linhas ((read (idtM mvie)) - 1)  newLine
+    let newContent = concatStrings newLines "\n"
+    hSetFileSize handle 0 --Apaga dados anteriores
+    hSeek handle AbsoluteSeek 0  -- Posiciona o cursor no início do arquivo
+    hPutStr handle newContent
+    hClose handle
 
+editComment :: [(String, Int, String)] -> (String, Int, String) -> [(String, Int, String)]
+editComment [] _ = []
+editComment [(x, y, z)] (a, b, c)
+    | a == x        = [(a,b,c)]
+    | otherwise     = [(x,y,z)]
+editComment ((x, y, z) : xs) (a, b, c)
+    | a == x        = (a, b, c) : (editComment xs (a,b,c))
+    | otherwise     = (x, y, z) : (editComment xs (a,b,c))
 
 commentToString :: [(String, Int, String)] -> String
 commentToString []              = ""
