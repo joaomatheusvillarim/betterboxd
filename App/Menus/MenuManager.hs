@@ -85,7 +85,7 @@ optionsMenuBusca1 userChoice
     | userChoice == "F" || userChoice == "f"    = menuBuscaFilme1
     | userChoice == "L" || userChoice == "l"    = print ""
     | userChoice == "P" || userChoice == "p"    = print ""
-    | userChoice == "S" || userChoice == "s"    = print ""
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
