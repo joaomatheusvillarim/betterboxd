@@ -1,6 +1,6 @@
 module App.Data.CsvManager where
 
-import App.Util.StringsOp( concatStrings, splitList )
+import App.Util.StringsOp( concatStrings, splitList, hGetContents2)
 import Control.Exception
 import System.IO.Unsafe( unsafeDupablePerformIO )
 import System.Environment
@@ -24,12 +24,6 @@ readCSV path = do
     let content = unsafeDupablePerformIO (readUTF8 path)
     splitList ';' (lines content)
 
-{- readUTF8 :: FilePath -> IO String
-readUTF8 path = do
-    handle <- openFile path ReadMode
-    hSetEncoding handle utf8
-    hGetContents handle -}
-
 readUTF8 :: FilePath -> IO String
 readUTF8 path = bracket
     (openFile path ReadMode)
@@ -40,7 +34,6 @@ readUTF8 path = bracket
         evaluate (length contents)  -- Avalia todo o conteúdo
         return contents
     )
-
 
 --Adiciona uma nova Linha a um arquivo CSV
 appendCSV :: FilePath -> [String] -> IO()
@@ -62,3 +55,25 @@ editarIndice [] _ _ = []
 editarIndice (x:xs) indice novoConteudo
     | indice == 0 = novoConteudo : xs
     | otherwise = x : editarIndice xs (indice - 1) novoConteudo
+
+
+editarLinhaCSV :: FilePath -> Int -> String -> IO()
+editarLinhaCSV path indice newLine = do
+    handle <- openFile path ReadWriteMode
+    hSetEncoding handle utf8
+    contents <- hGetContents2 handle
+    let newLines = editarIndice (lines contents) indice  newLine
+    hSetFileSize handle 0 --Apaga dados anteriores
+    hSeek handle AbsoluteSeek 0  -- Posiciona o cursor no início do arquivo
+    hPutStr handle (concatStrings newLines "\n")
+    hClose handle
+
+appendLinhaCSV :: FilePath -> String -> IO()
+appendLinhaCSV path linha = do
+    handle <- openFile path ReadWriteMode
+    hSetEncoding handle utf8
+    contents <- hGetContents2 handle 
+    hSetFileSize handle 0 --Apaga dados anteriores
+    hSeek handle AbsoluteSeek 0  -- Posiciona o cursor no início do arquivo
+    hPutStr handle ((concatStrings (lines contents) "\n") ++ "\n" ++ show ((length (lines contents)) +1) ++ ";"++ linha)
+    hClose handle

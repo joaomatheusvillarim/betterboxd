@@ -1,8 +1,9 @@
 module App.Betterboxd where
 
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors,comentarios, createMovie)
-import App.Models.User ( User, createUser, idt, user, nome, bio, senha )
+import App.Models.User ( User, createUser, idt, user, nome, bio, senha, listas )
 import App.Util.StringsOp (concatStrings)
+import App.Controllers.ListaController (createListaData, exibeListas)
 import App.Controllers.MovieController (getMovies, getMoviesByGenre, getMoviesByTittle, appendComment, updteComment, editComment)
 import App.Controllers.UserController (getUsers, appendUser, getUserLogged, getUserBy, hasUsername, getNextIdt, stringToUser)
 import App.Data.CsvManager ( writeCSV )
@@ -10,7 +11,10 @@ import qualified Data.Maybe
 import System.IO
 
 cadastraUsuario :: String -> String -> String -> String -> IO()
-cadastraUsuario nome user bio senha = appendUser [nome, user, bio, senha]
+cadastraUsuario nome user bio senha = do
+    createListaData ("Favoritos de " ++ nome)
+    createListaData ("Filmes Loggados de " ++ nome)
+    appendUser [nome, user, bio, senha]
 
 isLoginValid :: String -> String -> Bool
 isLoginValid usern psswrd = Data.Maybe.isJust usuarioInformado && (senha (Data.Maybe.fromJust usuarioInformado) == psswrd)
@@ -81,3 +85,13 @@ verificaComentUnico str ((x, y, z):xs)
     | str == x      = False
     | otherwise     = verificaComentUnico str xs
 
+
+exibePerfil :: User -> String
+exibePerfil usr = do
+    "\n" ++ replicate 41 '=' ++ "\n" ++ "            Perfil de Usuário          " ++ "\n"
+    ++ replicate 41 '=' ++ "\nNome:     " ++ nome usr
+    ++ "\n" ++ "Username: " ++ user usr
+    ++ "\n" ++ "Bio:      " ++ bio usr
+    ++ "\n" ++ replicate 41 '-' 
+    ++ "\n" ++ "             Listas de Filmes"
+    ++ "\n" ++ replicate 41 '-' ++ "\n" ++ exibeListas (listas usr) 1

@@ -7,8 +7,8 @@ import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro, getNumberStars, getComentario)
 import App.Models.Movie (Movie, idtM, comentarios)
 import App.Models.User (User, idt)
-import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment)
-import App.Controllers.ListController(addToMovieList, removeFromMovieList, createMovieList, getMoviesFromList, favoritesList, saveMovieList, loadMovieLists, getMovieById, allMovies)
+import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil)
+--import App.Controllers.ListController(addToMovieList, removeFromMovieList, createMovieList, getMoviesFromList, favoritesList, saveMovieList, loadMovieLists, getMovieById, allMovies)
 
 
 
@@ -55,6 +55,7 @@ menuCadastro = do
     senha <- getPasswordCadastro
 
     cadastraUsuario nome user bio senha
+    menuInicial
 
 menuPrincipal :: IO()
 menuPrincipal = do
@@ -66,7 +67,7 @@ menuPrincipal = do
 
 optionsMenuPrincipal :: String -> IO()
 optionsMenuPrincipal userChoice
-    | userChoice == "V" || userChoice == "v"    = print ""
+    | userChoice == "V" || userChoice == "v"    = menuPerfil (getUserLogged 0)
     | userChoice == "B" || userChoice == "b"    = menuBusca1
     | userChoice == "R" || userChoice == "r"    = print ""
     | userChoice == "S" || userChoice == "s"    = print ""
@@ -177,7 +178,12 @@ menuComentarioChange mvie = do
         menuFilme (searchMovieByID (idtM mvie))
     where userLogged = getUserLogged 0
 
-menuListaFilmes :: MovieList -> IO ()
+menuPerfil :: User -> IO()
+menuPerfil usr = do
+    printTxt "./App/Menus/logo.txt"
+    putStrLn (exibePerfil usr)
+
+{- menuListaFilmes :: MovieList -> IO ()
 menuListaFilmes movieList = do
     putStrLn "Lista de Filmes:"
     putStrLn "(T)odas suas Listas de Filmes"
@@ -222,6 +228,6 @@ adicionarFilmeLista movieList = do
             saveMovieList updatedList
             putStrLn "Filme adicionado à lista com sucesso!"
         Nothing -> do
-            putStrLn "Filme não encontrado."
+            putStrLn "Filme não encontrado." -}
 
             
