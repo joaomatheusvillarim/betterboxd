@@ -17,7 +17,7 @@
 |              Betterboxd              |
 ----------------------------------------
 (V)ER meu perfil
-(B)USCAR filme, lista, ou perfil
+(B)USCAR filme ou perfil
 (R)ECOMENDAÇÕES
 (S)AIR
 

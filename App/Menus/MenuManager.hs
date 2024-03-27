@@ -2,7 +2,7 @@ module App.Menus.MenuManager where
 
 import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
-import App.Controllers.UserController (getUserLogged, getUserBy, getUsers, editUser)
+import App.Controllers.UserController (getUserLogged, getUserBy, getUsers, editUser, exibeUsuarios)
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro, getNumberStars, getComentario)
 import App.Models.Movie (Movie, idtM, comentarios)
@@ -87,12 +87,42 @@ menuBusca1 = do
 optionsMenuBusca1 :: String -> IO()
 optionsMenuBusca1 userChoice
     | userChoice == "F" || userChoice == "f"    = menuBuscaFilme1
-    | userChoice == "P" || userChoice == "p"    = print ""
+    | userChoice == "P" || userChoice == "p"    = menuBuscaPerfil
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
         menuBusca1
+
+menuBuscaPerfil :: IO()
+menuBuscaPerfil = do
+    printTxt "./App/Menus/logo.txt"
+    putStrLn ("\n" ++ (replicate 41 '='))
+    let usuarios = getUsers 0
+    putStrLn ("\n" ++ exibeUsuarios (tail usuarios))
+    putStr "\nId: "
+    hFlush stdout
+    userChoice <- getLine
+    menuBuscaPerfil2 userChoice usuarios
+
+menuBuscaPerfil2 :: String -> [User] -> IO()
+menuBuscaPerfil2 userChoice users = do
+    if ((read userChoice) < 1 || (read userChoice) > length users) then do
+        putStrLn "\nIndex inválido"
+        threadDelay 700000
+        menuBuscaPerfil
+
+    else do
+        let userEscolhido = users !! (read userChoice)
+
+        if (idt userEscolhido) == idt (getUserLogged 0) then menuPerfil userEscolhido
+        else do
+            printTxt "./App/Menus/logo.txt"
+            putStrLn (exibePerfil userEscolhido)
+            putStrLn ""
+            --menubusca3 implementacao em breve
+
+    
 
 
 menuBuscaFilme1 :: IO()
