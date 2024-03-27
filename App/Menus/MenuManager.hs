@@ -2,18 +2,15 @@ module App.Menus.MenuManager where
 
 import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
-import App.Controllers.UserController (getUserLogged, getUserBy, getUsers)
+import App.Controllers.UserController (getUserLogged, getUserBy, getUsers, editUser)
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro, getNumberStars, getComentario)
 import App.Models.Movie (Movie, idtM, comentarios)
-import App.Models.User (User (listas), idt)
+import App.Models.User (User, idt, nome, user, bio, senha, listas, createUser)
 import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil, criaLista)
 import qualified Data.Maybe
 import App.Models.Lista (Lista (idtL, filmes))
 import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById)
-
-
-
 
 menuInicial :: IO()
 menuInicial = do
@@ -199,7 +196,7 @@ menuPerfilOptions :: User -> String -> IO()
 menuPerfilOptions usr userChoice
     | userChoice == "A" || userChoice == "a"    = menuCriacaoLista usr
     | userChoice == "S" || userChoice == "s"    = menuSelecaoLista usr
-    | userChoice == "E" || userChoice == "e"    = print ""
+    | userChoice == "E" || userChoice == "e"    = menuEdicaoUsuario usr
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
@@ -305,5 +302,52 @@ menuSelecionaFilme usr lista = do
     else do
         printMovieInfo (movies !! ((read userChoice) -1))
         menuFilme (movies !! ((read userChoice) -1))
+
+
+menuEdicaoUsuario :: User -> IO()
+menuEdicaoUsuario usr = do
+    printTxt "./App/Menus/MenuPerfil/Edicao.txt"
+    putStrLn "\nSelecione uma opção: "
+    hFlush stdout
+    userChoice <- getLine
+    menuEdicaoUsuarioOptions usr userChoice
+
+
+menuEdicaoUsuarioOptions :: User -> String -> IO()
+menuEdicaoUsuarioOptions usr userChoice
+    | userChoice == "N" || userChoice == "n"    = editNome usr
+    | userChoice == "B" || userChoice == "b"    = editBio usr
+    | userChoice == "U" || userChoice == "u"    = editUsername usr
+    | userChoice == "S" || userChoice == "s"    = editSenha usr
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
+    | otherwise = do
+        putStrLn "\nOpção Inválida!"
+        threadDelay 700000
+        menuPerfil usr
+
+editNome :: User -> IO()
+editNome usr = do
+    newName <- getNameCadastro
+    editUser (createUser (idt usr) newName (user usr) (bio usr) (senha usr) (listas usr))
+    menuPerfil (Data.Maybe.fromJust(getUserBy (getUsers 0) idt (idt usr))) 
+
+
+editBio :: User -> IO()
+editBio usr = do
+    newBio <- getBioCadastro
+    editUser (createUser (idt usr) (nome usr) (user usr) newBio (senha usr) (listas usr))
+    menuPerfil (Data.Maybe.fromJust(getUserBy (getUsers 0) idt (idt usr))) 
+
+editSenha :: User -> IO()
+editSenha usr = do
+    newSenha <- getPasswordCadastro
+    editUser (createUser (idt usr) (nome usr) (user usr) (bio usr) newSenha (listas usr))
+    menuPerfil (Data.Maybe.fromJust(getUserBy (getUsers 0) idt (idt usr))) 
+
+editUsername :: User -> IO()
+editUsername usr = do
+    newUser <- getUsernameCadastro
+    editUser (createUser (idt usr) (nome usr) newUser (bio usr) (senha usr) (listas usr))
+    menuPerfil (Data.Maybe.fromJust(getUserBy (getUsers 0) idt (idt usr))) 
 
 
