@@ -10,7 +10,7 @@ import App.Models.User (User, idt, nome, user, bio, senha, listas, createUser)
 import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil, criaLista)
 import qualified Data.Maybe
 import App.Models.Lista (Lista (idtL, filmes))
-import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById)
+import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById, removeMovieFromLista, editLista)
 
 menuInicial :: IO()
 menuInicial = do
@@ -87,7 +87,6 @@ menuBusca1 = do
 optionsMenuBusca1 :: String -> IO()
 optionsMenuBusca1 userChoice
     | userChoice == "F" || userChoice == "f"    = menuBuscaFilme1
-    | userChoice == "L" || userChoice == "l"    = print ""
     | userChoice == "P" || userChoice == "p"    = print ""
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
@@ -238,6 +237,7 @@ menuSelecaoLista2 usr lista = do
     putStrLn (replicate 40 '=')
     putStrLn "(A)DICIONAR Filme"
     putStrLn "(S)ELECIONAR Filme"
+    putStrLn "(R)EMOVER Filme"
     putStrLn "(V)OLTAR"
     putStrLn "\nSelecione uma opção: "
     hFlush stdout
@@ -249,6 +249,7 @@ menuSelecaoLista2Options :: User -> Lista -> String -> IO()
 menuSelecaoLista2Options usr lista userChoice
     | userChoice == "A" || userChoice == "a"    = menuBuscaFilmeLista usr lista
     | userChoice == "S" || userChoice == "s"    = menuSelecionaFilme usr lista
+    | userChoice == "R" || userChoice == "r"    = menuRemoveFilmeLista usr lista
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
@@ -302,6 +303,21 @@ menuSelecionaFilme usr lista = do
     else do
         printMovieInfo (movies !! ((read userChoice) -1))
         menuFilme (movies !! ((read userChoice) -1))
+
+menuRemoveFilmeLista :: User -> Lista -> IO()
+menuRemoveFilmeLista usr lista = do
+    let movies = filmes lista
+    putStr "\nId: "
+    hFlush stdout
+    userChoice <- getLine
+    if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+        putStrLn "\nIndex inválido"
+        threadDelay 700000
+        menuRemoveFilmeLista usr lista
+        
+    else do
+        editLista (removeMovieFromLista lista (idtM (movies !! ((read userChoice) -1))))
+        menuSelecaoLista2 usr (Data.Maybe.fromJust (getListaById (idtL lista) (getListas 0)))
 
 
 menuEdicaoUsuario :: User -> IO()

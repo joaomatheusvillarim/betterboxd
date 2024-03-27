@@ -17,7 +17,6 @@
 |          Betterboxd - Busca          |
 ----------------------------------------
 (F)ilmes
-(L)istas
 (P)erfis
 (V)OLTAR
 

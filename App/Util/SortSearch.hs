@@ -32,3 +32,9 @@ searchsBy func (x:xs) resultados
     | func x `elem` resultados  = x : searchsBy func xs resultados
     | otherwise                 = searchsBy func xs resultados
 
+
+removeBy :: (Eq b) => (a -> b) -> [a] -> b -> [a]
+removeBy _ [] _ = []
+removeBy func (x:xs) result
+    | func x == result  = removeBy func xs result
+    | otherwise         = x : removeBy func xs result

@@ -6,7 +6,7 @@ import App.Controllers.MovieController(getMoviesById, getMovies, moviesToIdStrin
 import App.Data.CsvManager (Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarIndice, appendLinhaCSV, editarLinhaCSV)
 import App.Util.StringsOp (splitOn, hGetContents2, concatStrings)
 import App.Models.Lista(Lista, idtL, nomeLista, filmes, createLista)
-import App.Util.SortSearch (searchBy, searchsBy)
+import App.Util.SortSearch (searchBy, searchsBy, removeBy)
 import System.IO
 
 stringToLista :: [String] -> Lista
@@ -55,3 +55,9 @@ exibeListas (x:xs) n    = (show n) ++ ". " ++ nomeLista x ++ "\n" ++ exibeListas
 exibeLista :: Lista -> String
 exibeLista lista = "\n" ++ replicate 41 '=' ++ "\n" ++ "            Filmes de " ++ nomeLista lista ++ "\n"
                     ++ replicate 41 '=' ++ "\n" ++ showMovies (filmes lista) 1
+
+removeMovieFromLista :: Lista -> String -> Lista
+removeMovieFromLista lista str = createLista (idtL lista) (nomeLista lista) (removeBy idtM (filmes lista) str)
+
+editLista :: Lista -> IO()
+editLista lista  = editarLinhaCSV "./App/Data/Listas.csv" (read (idtL lista) -1) (listaToString lista)
