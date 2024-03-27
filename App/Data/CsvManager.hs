@@ -53,8 +53,8 @@ editMatriz mat n newValue = x ++ [newValue] ++ ts
 editarIndice :: [String] -> Int -> String -> [String]
 editarIndice [] _ _ = []
 editarIndice (x:xs) indice novoConteudo
-    | indice == 0 = novoConteudo : xs
-    | otherwise = x : editarIndice xs (indice - 1) novoConteudo
+    | indice == 0       = novoConteudo : xs
+    | otherwise         = x : editarIndice xs (indice - 1) novoConteudo
 
 
 editarLinhaCSV :: FilePath -> Int -> String -> IO()

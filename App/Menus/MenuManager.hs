@@ -9,8 +9,8 @@ import App.Models.Movie (Movie, idtM, comentarios)
 import App.Models.User (User (listas), idt)
 import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil, criaLista)
 import qualified Data.Maybe
-import App.Models.Lista (Lista)
-import App.Controllers.ListaController (exibeLista)
+import App.Models.Lista (Lista (idtL))
+import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById)
 
 
 
@@ -238,53 +238,54 @@ menuSelecaoLista2 :: User -> Lista -> IO()
 menuSelecaoLista2 usr lista = do
     printTxt "./App/Menus/logo.txt"
     putStrLn (exibeLista lista)
-    
-
-{- menuListaFilmes :: MovieList -> IO ()
-menuListaFilmes movieList = do
-    putStrLn "Lista de Filmes:"
-    putStrLn "(T)odas suas Listas de Filmes"
-    putStrLn "(A)dicionar Filme à Lista"
-    putStrLn "(R)emover Filme da Lista"
-    putStrLn "(F)avoritos"
-    putStrLn "(V)oltar ao Menu Principal"
-    putStr "Selecione uma opção: "
+    putStrLn (replicate 40 '=')
+    putStrLn "(A)DICIONAR Filme"
+    putStrLn "(S)ELECIONAR Filme"
+    putStrLn "(V)OLTAR"
+    putStrLn "\nSelecione uma opção: "
     hFlush stdout
     userChoice <- getLine
-    optionsMenuListaFilmes userChoice movieList
+    menuSelecaoLista2Options usr lista userChoice
 
-optionsMenuListaFilmes :: String -> MovieList -> IO ()
-optionsMenuListaFilmes userChoice movieList
-    | userChoice == "T" || userChoice == "t"    = visualizarTodasListas movieList
-    | userChoice == "A" || userChoice == "a"    = adicionarFilmeLista movieList
-    | userChoice == "R" || userChoice == "r"    = removerFilmeLista movieList
-    | userChoice == "F" || userChoice == "f"    = visualizarFavoritos
+
+menuSelecaoLista2Options :: User -> Lista -> String -> IO()
+menuSelecaoLista2Options usr lista userChoice
+    | userChoice == "A" || userChoice == "a"    = menuBuscaFilmeLista usr lista
+    | userChoice == "S" || userChoice == "s"    = print ""
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
-        menuListaFilmes movieList
+        menuSelecaoLista2 usr lista
 
-visualizarTodasListas :: IO ()
-visualizarTodasListas = do
-    putStrLn "Todas as Listas de Filmes:"
-    allLists <- loadMovieLists
-    mapM_ (\list -> putStrLn (listName list)) allLists
+menuBuscaFilmeLista ::User -> Lista -> IO()
+menuBuscaFilmeLista usr lista = do
+    printTxt "./App/Menus/MenuBusca/MenuBuscaFilme.txt"
+    hFlush stdout
+    userChoice <- getLine
+    menuBuscaFilme2Lista usr lista userChoice
 
-adicionarFilmeLista :: MovieList -> IO ()
-adicionarFilmeLista movieList = do
-    putStrLn "Digite o ID do filme que deseja adicionar à lista:"
-    idStr <- getLine
-    let id = read idStr :: Int
-    movies <- allMovies
-    let maybeMovie = getMovieById id movies
+menuBuscaFilme2Lista ::User -> Lista -> String -> IO()
+menuBuscaFilme2Lista usr lista str = do
+    let filmes = searchMovieByTittle str
 
-    case maybeMovie of
-        Just movie -> do
-            let updatedList = addToMovieList movieList movie
-            saveMovieList updatedList
-            putStrLn "Filme adicionado à lista com sucesso!"
-        Nothing -> do
-            putStrLn "Filme não encontrado." -}
+    if (length filmes < 1) then do
+        putStrLn "\nNenhum retorno válido"
+        threadDelay 700000
+        menuBuscaFilmeLista usr lista
 
-            
+    else do
+        let filmesSTR = showMovies filmes 1
+        printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
+        putStrLn filmesSTR
+        putStr "\nId: "
+        hFlush stdout
+        userChoice <- getLine
+        if ((read userChoice) < 1 || (read userChoice) > length filmes) then do
+            putStrLn "\nIndex inválido"
+            threadDelay 700000
+            menuBuscaFilme2Lista usr lista str
+
+        else do
+            appendMovieToLista lista (filmes !! ((read userChoice) -1))
+            menuSelecaoLista2 usr (Data.Maybe.fromJust (getListaById (idtL lista) (getListas 0)))

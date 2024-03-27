@@ -27,7 +27,7 @@ createListaData :: String -> IO()
 createListaData nome = appendLinhaCSV "./App/Data/Listas.csv" (nome ++ ";")
 
 appendMovieToLista :: Lista -> Movie -> IO()
-appendMovieToLista lista movie = editarLinhaCSV "./App/Data/Listas.csv" (read (idtL lista)) newLinha
+appendMovieToLista lista movie = editarLinhaCSV "./App/Data/Listas.csv" (read (idtL lista) -1) newLinha
     where newLinha = (listaToString lista) ++ "," ++ (idtM movie)
 
 getListaById :: String -> [Lista] -> Maybe Lista
