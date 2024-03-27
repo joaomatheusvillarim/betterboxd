@@ -9,7 +9,7 @@ import App.Models.Movie (Movie, idtM, comentarios)
 import App.Models.User (User (listas), idt)
 import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil, criaLista)
 import qualified Data.Maybe
-import App.Models.Lista (Lista (idtL))
+import App.Models.Lista (Lista (idtL, filmes))
 import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById)
 
 
@@ -108,28 +108,28 @@ menuBuscaFilme1 = do
 
 menuBuscaFilme2 :: String -> IO()
 menuBuscaFilme2 str = do
-    let filmes = searchMovieByTittle str
+    let movies = searchMovieByTittle str
 
-    if (length filmes < 1) then do
+    if (length movies < 1) then do
         putStrLn "\nNenhum retorno válido"
         threadDelay 700000
         menuBuscaFilme1
 
     else do
-        let filmesSTR = showMovies filmes 1
+        let filmesSTR = showMovies movies 1
         printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
         putStrLn filmesSTR
         putStr "\nId: "
         hFlush stdout
         userChoice <- getLine
-        if ((read userChoice) < 1 || (read userChoice) > length filmes) then do
+        if ((read userChoice) < 1 || (read userChoice) > length movies) then do
             putStrLn "\nIndex inválido"
             threadDelay 700000
             menuBuscaFilme2 str
 
         else do
-            printMovieInfo (filmes !! ((read userChoice) -1))
-            menuFilme (filmes !! ((read userChoice) -1))
+            printMovieInfo (movies !! ((read userChoice) -1))
+            menuFilme (movies !! ((read userChoice) -1))
 
 menuFilme :: Movie -> IO()
 menuFilme mvie = do
@@ -251,7 +251,7 @@ menuSelecaoLista2 usr lista = do
 menuSelecaoLista2Options :: User -> Lista -> String -> IO()
 menuSelecaoLista2Options usr lista userChoice
     | userChoice == "A" || userChoice == "a"    = menuBuscaFilmeLista usr lista
-    | userChoice == "S" || userChoice == "s"    = print ""
+    | userChoice == "S" || userChoice == "s"    = menuSelecionaFilme usr lista
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
@@ -267,25 +267,43 @@ menuBuscaFilmeLista usr lista = do
 
 menuBuscaFilme2Lista ::User -> Lista -> String -> IO()
 menuBuscaFilme2Lista usr lista str = do
-    let filmes = searchMovieByTittle str
+    let movies = searchMovieByTittle str
 
-    if (length filmes < 1) then do
+    if (length movies < 1) then do
         putStrLn "\nNenhum retorno válido"
         threadDelay 700000
         menuBuscaFilmeLista usr lista
 
     else do
-        let filmesSTR = showMovies filmes 1
+        let filmesSTR = showMovies movies 1
         printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
         putStrLn filmesSTR
         putStr "\nId: "
         hFlush stdout
         userChoice <- getLine
-        if ((read userChoice) < 1 || (read userChoice) > length filmes) then do
+        if ((read userChoice) < 1 || (read userChoice) > length movies) then do
             putStrLn "\nIndex inválido"
             threadDelay 700000
             menuBuscaFilme2Lista usr lista str
 
         else do
-            appendMovieToLista lista (filmes !! ((read userChoice) -1))
+            appendMovieToLista lista (movies !! ((read userChoice) -1))
             menuSelecaoLista2 usr (Data.Maybe.fromJust (getListaById (idtL lista) (getListas 0)))
+
+
+menuSelecionaFilme :: User -> Lista -> IO()
+menuSelecionaFilme usr lista = do
+    let movies = filmes lista
+    putStr "\nId: "
+    hFlush stdout
+    userChoice <- getLine
+    if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+        putStrLn "\nIndex inválido"
+        threadDelay 700000
+        menuSelecionaFilme usr lista
+        
+    else do
+        printMovieInfo (movies !! ((read userChoice) -1))
+        menuFilme (movies !! ((read userChoice) -1))
+
+
