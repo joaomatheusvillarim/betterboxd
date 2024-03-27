@@ -25,7 +25,7 @@ optionsMenuInicial :: String -> IO()
 optionsMenuInicial userChoice
     | userChoice == "E" || userChoice == "e"    = menuLogin
     | userChoice == "C" || userChoice == "c"    = menuCadastro
-    | userChoice == "S" || userChoice == "s"    = print ""
+    | userChoice == "S" || userChoice == "s"    = putStrLn ""
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
@@ -70,7 +70,7 @@ optionsMenuPrincipal userChoice
     | userChoice == "V" || userChoice == "v"    = menuPerfil (getUserLogged 0)
     | userChoice == "B" || userChoice == "b"    = menuBusca1
     | userChoice == "R" || userChoice == "r"    = print ""
-    | userChoice == "S" || userChoice == "s"    = print ""
+    | userChoice == "S" || userChoice == "s"    = putStrLn ""
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
