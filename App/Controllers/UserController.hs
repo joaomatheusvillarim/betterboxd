@@ -65,3 +65,8 @@ appendListaToUser :: Lista -> User -> IO()
 appendListaToUser lista usr = editUser newUser
     where   newListas = listas usr ++ [lista]
             newUser = createUser (idt usr) (nome usr) (user usr) (bio usr) (senha usr) newListas
+
+exibeUsuarios :: [User] -> String
+exibeUsuarios [] = ""
+exibeUsuarios [x] = idt x ++ ". " ++ nome x
+exibeUsuarios (x:xs) = idt x ++ ". " ++ nome x ++ "\n" ++ exibeUsuarios xs
