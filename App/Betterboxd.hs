@@ -3,12 +3,13 @@ module App.Betterboxd where
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors,comentarios, createMovie)
 import App.Models.User ( User, createUser, idt, user, nome, bio, senha, listas )
 import App.Util.StringsOp (concatStrings)
-import App.Controllers.ListaController (createListaData, exibeListas)
+import App.Controllers.ListaController (createListaData, exibeListas, getLastLista)
 import App.Controllers.MovieController (getMovies, getMoviesByGenre, getMoviesByTittle, appendComment, updteComment, editComment)
-import App.Controllers.UserController (getUsers, appendUser, getUserLogged, getUserBy, hasUsername, getNextIdt, stringToUser)
+import App.Controllers.UserController (getUsers, appendUser, getUserLogged, getUserBy, hasUsername, getNextIdt, stringToUser, editUser, appendListaToUser)
 import App.Data.CsvManager ( writeCSV )
 import qualified Data.Maybe
 import System.IO
+import App.Models.Lista (Lista)
 
 cadastraUsuario :: String -> String -> String -> String -> IO()
 cadastraUsuario nome user bio senha = do
@@ -95,3 +96,9 @@ exibePerfil usr = do
     ++ "\n" ++ replicate 41 '-' 
     ++ "\n" ++ "             Listas de Filmes"
     ++ "\n" ++ replicate 41 '-' ++ "\n" ++ exibeListas (listas usr) 1
+    ++ "\n" ++ replicate 41 '-'
+
+criaLista :: String -> User -> IO()
+criaLista str usr = do
+    createListaData str
+    appendListaToUser (getLastLista 0) usr

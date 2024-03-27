@@ -72,3 +72,8 @@ moviesToIdString :: [Movie] -> String
 moviesToIdString []     = ""
 moviesToIdString [x]    = idtM x
 moviesToIdString (x:xs) = idtM x ++ "," ++ moviesToIdString xs
+
+showMovies :: [Movie] -> Int -> String
+showMovies [] _     = ""
+showMovies (x:[]) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x)
+showMovies (x:xs) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x) ++ "\n" ++ showMovies xs (n+1)

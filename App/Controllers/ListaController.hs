@@ -2,7 +2,7 @@ module App.Controllers.ListaController where
 
 import App.Models.Movie (Movie, idtM)
 import App.Models.Lista(Lista, idtL, nomeLista, filmes, createLista)
-import App.Controllers.MovieController(getMoviesById, getMovies, moviesToIdString)
+import App.Controllers.MovieController(getMoviesById, getMovies, moviesToIdString, moviesToIdString, showMovies)
 import App.Data.CsvManager (Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarIndice, appendLinhaCSV, editarLinhaCSV)
 import App.Util.StringsOp (splitOn, hGetContents2, concatStrings)
 import App.Models.Lista(Lista, idtL, nomeLista, filmes, createLista)
@@ -39,12 +39,19 @@ getListasById str listas = searchsBy idtL listas str
 listasToIdL :: [Lista] -> String
 listasToIdL []      = ""
 listasToIdL [x]     = idtL x
-listasToIdL (x:xs)  = idtL x ++ ","
+listasToIdL (x:xs)  = idtL x ++ "," ++ listasToIdL xs
 
 getLastId :: Int -> String
 getLastId n = idtL (last (getListas 0))
+
+getLastLista :: Int -> Lista
+getLastLista n = last (getListas 0)
 
 exibeListas :: [Lista] -> Int -> String
 exibeListas [] _        = ""
 exibeListas [x] n       = (show n) ++ ". " ++ nomeLista x 
 exibeListas (x:xs) n    = (show n) ++ ". " ++ nomeLista x ++ "\n" ++ exibeListas xs (n + 1)
+
+exibeLista :: Lista -> String
+exibeLista lista = "\n" ++ replicate 41 '=' ++ "\n" ++ "            Filmes de " ++ nomeLista lista ++ "\n"
+                    ++ replicate 41 '=' ++ "\n" ++ showMovies (filmes lista) 1

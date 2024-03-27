@@ -2,13 +2,16 @@ module App.Menus.MenuManager where
 
 import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
-import App.Controllers.UserController (getUserLogged)
+import App.Controllers.UserController (getUserLogged, getUserBy, getUsers)
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro, getNumberStars, getComentario)
 import App.Models.Movie (Movie, idtM, comentarios)
-import App.Models.User (User, idt)
-import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil)
---import App.Controllers.ListController(addToMovieList, removeFromMovieList, createMovieList, getMoviesFromList, favoritesList, saveMovieList, loadMovieLists, getMovieById, allMovies)
+import App.Models.User (User (listas), idt)
+import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil, criaLista)
+import qualified Data.Maybe
+import App.Models.Lista (Lista)
+import App.Controllers.ListaController (exibeLista)
+
 
 
 
@@ -182,6 +185,60 @@ menuPerfil :: User -> IO()
 menuPerfil usr = do
     printTxt "./App/Menus/logo.txt"
     putStrLn (exibePerfil usr)
+    putStrLn ""
+    putStrLn "(A)DICIONAR Lista"
+    putStrLn "(S)ELECIONAR Lista"
+    putStrLn "(E)DITAR Dados"
+    putStrLn "(V)OLTAR"
+    putStrLn "\nSelecione uma opção: "
+    hFlush stdout
+    userChoice <- getLine
+    menuPerfilOptions usr userChoice
+
+menuPerfilOptions :: User -> String -> IO()
+menuPerfilOptions usr userChoice
+    | userChoice == "A" || userChoice == "a"    = menuCriacaoLista usr
+    | userChoice == "S" || userChoice == "s"    = menuSelecaoLista usr
+    | userChoice == "E" || userChoice == "e"    = print ""
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
+    | otherwise = do
+        putStrLn "\nOpção Inválida!"
+        threadDelay 700000
+        menuPerfil usr
+
+menuCriacaoLista :: User -> IO()
+menuCriacaoLista usr = do
+    printTxt "./App/Menus/MenuPerfil/CriacaoLista.txt"
+    nome <- getLine
+    criaLista nome usr
+    menuPerfil (Data.Maybe.fromJust(getUserBy (getUsers 0) idt (idt usr)))
+
+menuSelecaoLista :: User -> IO()
+menuSelecaoLista usr = do
+    let lists = listas usr
+    putStrLn "\nId: "
+    userChoice <- getLine
+    
+    if(length lists) < 1 then do
+        putStrLn "\nVoce não tem nenhuma lista."
+        threadDelay 1400000
+        menuPerfil usr
+
+    else do 
+        if (length lists) < (read userChoice) || (read userChoice) < 1  then do
+            putStrLn "\nERROR: ID inválido"
+            threadDelay 1400000
+            menuPerfil usr
+        else do
+            menuSelecaoLista2 usr (lists !! (read userChoice -1)) 
+
+
+
+menuSelecaoLista2 :: User -> Lista -> IO()
+menuSelecaoLista2 usr lista = do
+    printTxt "./App/Menus/logo.txt"
+    putStrLn (exibeLista lista)
+    
 
 {- menuListaFilmes :: MovieList -> IO ()
 menuListaFilmes movieList = do

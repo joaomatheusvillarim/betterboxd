@@ -3,8 +3,8 @@ module App.Controllers.UserController where
 import App.Util.SortSearch (msort, searchBy, searchsBy)
 import App.Models.User ( User, createUser, idt, user, nome, bio, senha, listas)
 import App.Models.Lista ( Lista, idtL, nomeLista, filmes, createLista)
-import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz)
-import App.Util.StringsOp( splitList, hGetContents2, splitOn)
+import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarLinhaCSV)
+import App.Util.StringsOp( splitList, hGetContents2, splitOn, concatStrings)
 import App.Controllers.ListaController(getListaById, getListasById, getListas, listasToIdL, getLastId)
 import qualified Data.Maybe
 import System.IO
@@ -23,9 +23,16 @@ matrizToUser (x:xs) = stringToUser x : ( matrizToUser xs )
 userToRow :: User -> [String]
 userToRow u = [idt u, user u, nome u, bio u, senha u, listasToIdL (listas u)]
 
+userToString :: User -> String
+userToString usr = concatStrings (userToRow usr) ";"
+
 --Retorna uma lista de todos usuarios cadastrados
 getUsers :: Int -> [User]
 getUsers n =  matrizToUser ( readCSV "./App/Data/Users.csv" )
+
+editUser :: User -> IO()
+editUser usr = do
+    editarLinhaCSV "./App/Data/Users.csv" (read (idt usr)) (userToString usr)
 
 --Adiciona um User aos arquivos
 appendUser :: [String] ->  IO()
@@ -53,3 +60,8 @@ getUserLogged n = Data.Maybe.fromJust $ getUserBy (getUsers 0) idt userID
 
 getNextIdt :: Int -> Int
 getNextIdt n = length (readCSV "./App/Data/Perfil.csv")
+
+appendListaToUser :: Lista -> User -> IO()
+appendListaToUser lista usr = editUser newUser
+    where   newListas = listas usr ++ [lista]
+            newUser = createUser (idt usr) (nome usr) (user usr) (bio usr) (senha usr) newListas
