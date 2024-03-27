@@ -15,7 +15,7 @@ cadastraUsuario :: String -> String -> String -> String -> IO()
 cadastraUsuario nome user bio senha = do
     createListaData ("Favoritos de " ++ nome)
     createListaData ("Filmes Loggados de " ++ nome)
-    appendUser [nome, user, bio, senha]
+    appendUser [user, nome, bio, senha]
 
 isLoginValid :: String -> String -> Bool
 isLoginValid usern psswrd = Data.Maybe.isJust usuarioInformado && (senha (Data.Maybe.fromJust usuarioInformado) == psswrd)
@@ -25,7 +25,6 @@ doLogin :: String -> IO()
 doLogin userName = do
     let usuario = Data.Maybe.fromJust $ getUserBy (getUsers 0) user userName
     writeCSV "./App/Data/Temp.csv" [[idt usuario]]
-
 
 searchMovieByID :: String -> Movie
 searchMovieByID str = (getMovies 0) !! ((read str) - 1)
@@ -78,14 +77,12 @@ printMovieInfo movie = do
         stars :: Int -> String
         stars n = replicate n '*' ++ replicate (5 - n) '°'
 
-
 verificaComentUnico :: String -> [(String, Int, String)] -> Bool
 verificaComentUnico _ []            = True
 verificaComentUnico str [(x, y, z)] = str /= x
 verificaComentUnico str ((x, y, z):xs)
     | str == x      = False
     | otherwise     = verificaComentUnico str xs
-
 
 exibePerfil :: User -> String
 exibePerfil usr = do
