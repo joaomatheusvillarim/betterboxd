@@ -15,6 +15,7 @@ cadastraUsuario :: String -> String -> String -> String -> IO()
 cadastraUsuario nome user bio senha = do
     createListaData ("Favoritos de " ++ nome)
     createListaData ("Filmes Loggados de " ++ nome)
+    createListaData ("Recomendados para " ++ nome)
     appendUser [user, nome, bio, senha]
 
 isLoginValid :: String -> String -> Bool

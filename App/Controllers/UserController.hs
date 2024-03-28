@@ -42,9 +42,9 @@ appendUser [user, name, bio, senha] = do
     contents <- hGetContents2 handle
     let idt = lines contents
     hSeek handle SeekFromEnd 0
-    hPutStr handle  ("\n" ++ show (length idt) ++ ";" ++ user ++ ";" ++ name ++ ";" ++ bio ++ ";" ++ senha ++ ";" ++ show indiceLista ++ "," ++ show (indiceLista +1))
+    hPutStr handle  ("\n" ++ show (length idt) ++ ";" ++ user ++ ";" ++ name ++ ";" ++ bio ++ ";" ++ senha ++ ";" ++ show indiceLista ++ "," ++ show (indiceLista +1) ++ "," ++ show (indiceLista +2))
     hClose handle
-    where indiceLista = read (getLastId 0) -1
+    where indiceLista = read (getLastId 0) -2
 
 --Verifica a existencia de um username, retorna TRUE  caso existe
 hasUsername :: String -> Bool
