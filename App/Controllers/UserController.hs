@@ -6,6 +6,7 @@ import App.Models.Lista ( Lista, idtL, nomeLista, filmes, createLista)
 import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarLinhaCSV)
 import App.Util.StringsOp( splitList, hGetContents2, splitOn, concatStrings)
 import App.Controllers.ListaController(getListaById, getListasById, getListas, listasToIdL, getLastId, exibeListas)
+import App.Controllers.MovieController
 import qualified Data.Maybe
 import System.IO
 
@@ -81,3 +82,15 @@ exibePerfil usr = do
     ++ "\n" ++ "             Listas de Filmes"
     ++ "\n" ++ replicate 41 '-' ++ "\n" ++ exibeListas (listas usr) 1
     ++ "\n" ++ replicate 41 '-'
+
+exibeEstatisticas :: User -> String
+exibeEstatisticas usr = do
+    "\n" ++ replicate 41 '=' ++ "\n" ++ "       Estatisticas de Usuário      " ++ "\n"
+    ++ replicate 41 '=' ++ "\nFilmes assistidos:     " ++ show (length totalFilmes)
+    ++ "\nGênero favorito:       " ++ mostFrequentGender  totalFilmes
+    ++ "\nAtor favorito:         " ++ mostFrequentActor totalFilmes
+    ++ "\nDiretor favorito:      " ++ mostFrequentDirector totalFilmes
+    ++ "\n" ++ replicate 41 '='
+    where   favoritos   = filmes (head $ listas usr)
+            assistidos  = filmes (listas usr !! 1)
+            totalFilmes = favoritos ++ assistidos

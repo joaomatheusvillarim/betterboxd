@@ -2,7 +2,7 @@ module App.Menus.MenuManager where
 
 import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
-import App.Controllers.UserController (getUserLogged, getUserBy, getUsers, editUser, exibeUsuarios, exibePerfil)
+import App.Controllers.UserController (getUserLogged, getUserBy, getUsers, editUser, exibeUsuarios, exibePerfil, exibeEstatisticas)
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro, getNumberStars, getComentario)
 import App.Models.Movie (Movie, idtM, comentarios)
@@ -304,6 +304,7 @@ menuPerfil usr = do
     putStrLn "(A)DICIONAR Lista"
     putStrLn "(S)ELECIONAR Lista"
     putStrLn "(E)DITAR Dados"
+    putStrLn "(ES)TATISTICAS do Usuário"
     putStrLn "(V)OLTAR"
     putStrLn "\nSelecione uma opção: "
     hFlush stdout
@@ -315,11 +316,23 @@ menuPerfilOptions usr userChoice
     | userChoice == "A" || userChoice == "a"    = menuCriacaoLista usr
     | userChoice == "S" || userChoice == "s"    = menuSelecaoLista usr
     | userChoice == "E" || userChoice == "e"    = menuEdicaoUsuario usr
+    | userChoice == "ES"|| userChoice == "es"   = menuEstatisticas usr
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
         menuPerfil usr
+
+menuEstatisticas :: User -> IO()
+menuEstatisticas usr = do
+    printTxt "./App/Menus/MenusTxt/logo.txt"
+    putStrLn $ exibeEstatisticas usr
+    putStrLn ""
+    putStrLn "\nDigite qualquer coisa para voltar."
+    hFlush stdout
+    userChoice <- getLine
+    menuPerfil usr
+
 
 menuCriacaoLista :: User -> IO()
 menuCriacaoLista usr = do
