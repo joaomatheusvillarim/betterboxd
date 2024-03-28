@@ -16,17 +16,6 @@
 ----------------------------------------
 |       Betterboxd - Recomendações     |
 ----------------------------------------
-Selecione um dos gêneros a seguir:
-
-1. Comedia          | 12. Crime
-2. Drama            | 13. Kids & Family
-3. Romance    	    | 14. Animação
-4. Sci-Fi   	    | 15. LGBTQ+
-5. Terror    	    | 16. Musical
-6. Documentários    | 17. Guerra
-7. Biografia        | 18. Mistério e Suspense
-8. Historia         | 19. Música
-9. Aventura         | 20. Festividades
-10. Ação            | 21. Faroeste
-11. Fantasia        | 22. Esportes
-----------------------------------------
+(T)OP 10 filmes por gênero
+(R)ECOMENDAÇÕES personalizadas 
+(V)OLTAR

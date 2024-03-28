@@ -11,6 +11,7 @@ import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTit
 import qualified Data.Maybe
 import App.Models.Lista (Lista (idtL, filmes))
 import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById, removeMovieFromLista, editLista)
+import App.Controllers.MovieController (getBestMoviesByGenre, getMovies)
 
 menuInicial :: IO()
 menuInicial = do
@@ -69,7 +70,7 @@ optionsMenuPrincipal :: String -> IO()
 optionsMenuPrincipal userChoice
     | userChoice == "V" || userChoice == "v"    = menuPerfil (getUserLogged 0)
     | userChoice == "B" || userChoice == "b"    = menuBusca1
-    | userChoice == "R" || userChoice == "r"    = print ""
+    | userChoice == "R" || userChoice == "r"    = menuRecomendacao (getUserLogged 0)
     | userChoice == "S" || userChoice == "s"    = putStrLn ""
     | otherwise = do
         putStrLn "\nOpção Inválida!"
@@ -485,3 +486,57 @@ editUsername usr = do
     menuPerfil (Data.Maybe.fromJust(getUserBy (getUsers 0) idt (idt usr))) 
 
 
+menuRecomendacao :: User -> IO()
+menuRecomendacao usr = do
+    printTxt "./App/Menus/MenuRecomendações/Recomendacao.txt"
+    putStr "\n\nSelecione uma opção: "
+    hFlush stdout
+    userChoice <- getLine
+    menuRecomendacaoOptions usr userChoice
+
+menuRecomendacaoOptions :: User -> String -> IO()
+menuRecomendacaoOptions usr userChoice
+    | userChoice == "T" || userChoice == "t"    = menuRecomendacaoTop10 usr
+    | userChoice == "R" || userChoice == "r"    = print ""
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
+    | otherwise = do
+        putStrLn "\nOpção Inválida!"
+        threadDelay 700000
+        menuRecomendacao usr
+
+menuRecomendacaoTop10 :: User -> IO()
+menuRecomendacaoTop10 usr = do
+    printTxt "./App/Menus/MenuRecomendações/CatalogoFilmes.txt"
+    putStrLn "\nSelecione uma opção: "
+    hFlush stdout
+    userChoice <- getLine
+    menuRecomendacaoTop10Option usr userChoice
+
+menuRecomendacaoTop10Option :: User -> String -> IO()
+menuRecomendacaoTop10Option usr userChoice = do
+    let generos = ["Comedy", "Drama", "Romance", "Sci-Fi", "Horror", "Documentary", "Biography", "History" , "Adventure", "Action", "Fantasy", "Crime", "Kids & Family", "Animation", "LGBTQ+", "Musical", "War", "Mystery & Thriller", "Music", "Holiday", "Western", "Sports"]
+    if (read userChoice < 1) || (read userChoice > 22) then do
+        putStrLn "\nError, id invalido"
+        threadDelay 700000
+        menuRecomendacaoTop10 usr
+    else do
+        let filmes = getBestMoviesByGenre (generos !! (read userChoice -1)) 10 (getMovies 0)
+        menuRecomendacaoTop10Exibicao usr filmes
+
+menuRecomendacaoTop10Exibicao :: User -> [Movie] -> IO()
+menuRecomendacaoTop10Exibicao usr mvies = do
+    printTxt "./App/Menus/logo.txt"
+    putStrLn ("\n" ++ (replicate 41 '='))
+    putStrLn (showMovies mvies 1)
+    putStr "\nSelecione um filme: "
+    hFlush stdout
+    userChoice <- getLine
+
+    if (read userChoice < 1) || (read userChoice > (length mvies)) then do
+        putStrLn "\nError, id invalido"
+        threadDelay 700000
+        menuRecomendacaoTop10Exibicao usr mvies
+
+    else do
+        printMovieInfo (mvies !! ((read userChoice) -1))
+        menuFilme (mvies !! ((read userChoice) -1))

@@ -29,7 +29,7 @@ getMoviesById :: [String] -> [Movie] -> [Movie]
 getMoviesById ids mvies = searchsBy idtM mvies ids
 
 {- 'Comedy', 'Drama', 'Romance', 'Sci-Fi', 'Horror', 'Documentary', 'Biography', 'History', 'Adventure', 'Action', 'Fantasy', 'Crime',
- 'Kids & Family', 'Animation', 'LGBTQ+', 'Musical', 'War', 'Mystery & Thriller', 'Music', 'Holiday', 'Western', 'Sports', 'Anime' -}
+ 'Kids & Family', 'Animation', 'LGBTQ+', 'Musical', 'War', 'Mystery & Thriller', 'Music', 'Holiday', 'Western', 'Sports' -}
 
 getMoviesByGenre :: String -> [Movie] -> [Movie]
 getMoviesByGenre _ []      = []
