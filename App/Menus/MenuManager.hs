@@ -15,7 +15,7 @@ import App.Controllers.MovieController (getBestMoviesByGenre, getMovies, recomen
 
 menuInicial :: IO()
 menuInicial = do
-    printTxt "./App/Menus/MenuInicial.txt"
+    printTxt "./App/Menus/MenusTxt/MenuInicial.txt"
     putStr "Selecione uma opção: "
     hFlush stdout
     userChoice <- getLine
@@ -34,7 +34,7 @@ optionsMenuInicial userChoice
 
 menuLogin :: IO()
 menuLogin = do
-    printTxt "./App/Menus/MenuLogin.txt"
+    printTxt "./App/Menus/MenusTxt/MenuLogin.txt"
     login <- getUsernameLogin
     senha <- getPasswordLogin
 
@@ -49,7 +49,7 @@ menuLogin = do
 
 menuCadastro :: IO()
 menuCadastro = do
-    printTxt "./App/Menus/MenuLogin.txt"
+    printTxt "./App/Menus/MenusTxt/MenuLogin.txt"
     user <- getUsernameCadastro
     nome <- getNameCadastro
     bio <- getBioCadastro
@@ -60,7 +60,7 @@ menuCadastro = do
 
 menuPrincipal :: IO()
 menuPrincipal = do
-    printTxt "./App/Menus/MenuPrincipal.txt"
+    printTxt "./App/Menus/MenusTxt/MenuPrincipal.txt"
     putStr "Selecione uma opção: "
     hFlush stdout
     userChoice <- getLine
@@ -79,7 +79,7 @@ optionsMenuPrincipal userChoice
 
 menuBusca1 :: IO()
 menuBusca1 = do
-    printTxt "./App/Menus/MenuBusca/MenuBusca1.txt"
+    printTxt "./App/Menus/MenusTxt/MenuBusca1.txt"
     putStr "Selecione uma opção: "
     hFlush stdout
     userChoice <- getLine
@@ -97,7 +97,7 @@ optionsMenuBusca1 userChoice
 
 menuBuscaPerfil :: IO()
 menuBuscaPerfil = do
-    printTxt "./App/Menus/logo.txt"
+    printTxt "./App/Menus/MenusTxt/logo.txt"
     putStrLn ("\n" ++ (replicate 41 '='))
     let usuarios = getUsers 0
     putStrLn ("\n" ++ exibeUsuarios (tail usuarios))
@@ -118,7 +118,7 @@ menuBuscaPerfil2 userChoice users = do
 
         if (idt userEscolhido) == idt (getUserLogged 0) then menuPerfil userEscolhido
         else do
-            printTxt "./App/Menus/logo.txt"
+            printTxt "./App/Menus/MenusTxt/logo.txt"
             putStrLn (exibePerfil userEscolhido)
             putStrLn ""
             putStrLn "(S)ELECIONAR Lista"
@@ -141,7 +141,7 @@ menuBuscaPerfil2Options userChoice usr
 
 menuPerfilRecomendacao :: User -> IO()
 menuPerfilRecomendacao usr = do
-    printTxt "./App/Menus/MenuBusca/MenuBuscaFilme.txt"
+    printTxt "./App/Menus/MenusTxt/MenuBuscaFilme.txt"
     hFlush stdout
     userChoice <- getLine
     menuPerfilRecomendacao2 usr userChoice
@@ -157,7 +157,7 @@ menuPerfilRecomendacao2 usr str= do
 
     else do
         let filmesSTR = showMovies movies 1
-        printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
+        printTxt "./App/Menus/MenusTxt/MenuBuscaFilme2.txt"
         putStrLn filmesSTR
         putStr "Id: "
         hFlush stdout
@@ -195,7 +195,7 @@ menuSelecaoListaBusca usr = do
 
 menuSelecaoListaBusca2 :: User -> Lista -> IO()
 menuSelecaoListaBusca2 usr lista = do
-    printTxt "./App/Menus/logo.txt"
+    printTxt "./App/Menus/MenusTxt/logo.txt"
     putStrLn (exibeLista lista)
     putStrLn (replicate 40 '=')
     putStrLn "(S)ELECIONAR Filme"
@@ -216,7 +216,7 @@ menuSelecaoListaBuscaOptions usr lista userChoice
 
 menuBuscaFilme1 :: IO()
 menuBuscaFilme1 = do
-    printTxt "./App/Menus/MenuBusca/MenuBuscaFilme.txt"
+    printTxt "./App/Menus/MenusTxt/MenuBuscaFilme.txt"
     hFlush stdout
     userChoice <- getLine
     menuBuscaFilme2 userChoice
@@ -232,7 +232,7 @@ menuBuscaFilme2 str = do
 
     else do
         let filmesSTR = showMovies movies 1
-        printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
+        printTxt "./App/Menus/MenusTxt/MenuBuscaFilme2.txt"
         putStrLn filmesSTR
         putStr "\nId: "
         hFlush stdout
@@ -298,7 +298,7 @@ menuComentarioChange mvie = do
 
 menuPerfil :: User -> IO()
 menuPerfil usr = do
-    printTxt "./App/Menus/logo.txt"
+    printTxt "./App/Menus/MenusTxt/logo.txt"
     putStrLn (exibePerfil usr)
     putStrLn ""
     putStrLn "(A)DICIONAR Lista"
@@ -323,7 +323,7 @@ menuPerfilOptions usr userChoice
 
 menuCriacaoLista :: User -> IO()
 menuCriacaoLista usr = do
-    printTxt "./App/Menus/MenuPerfil/CriacaoLista.txt"
+    printTxt "./App/Menus/MenusTxt/CriacaoLista.txt"
     nome <- getLine
     criaLista nome usr
     menuPerfil (Data.Maybe.fromJust(getUserBy (getUsers 0) idt (idt usr)))
@@ -351,7 +351,7 @@ menuSelecaoLista usr = do
 
 menuSelecaoLista2 :: User -> Lista -> IO()
 menuSelecaoLista2 usr lista = do
-    printTxt "./App/Menus/logo.txt"
+    printTxt "./App/Menus/MenusTxt/logo.txt"
     putStrLn (exibeLista lista)
     putStrLn (replicate 40 '=')
     putStrLn "(A)DICIONAR Filme"
@@ -377,7 +377,7 @@ menuSelecaoLista2Options usr lista userChoice
 
 menuBuscaFilmeLista ::User -> Lista -> IO()
 menuBuscaFilmeLista usr lista = do
-    printTxt "./App/Menus/MenuBusca/MenuBuscaFilme.txt"
+    printTxt "./App/Menus/MenusTxt/MenuBuscaFilme.txt"
     hFlush stdout
     userChoice <- getLine
     menuBuscaFilme2Lista usr lista userChoice
@@ -393,7 +393,7 @@ menuBuscaFilme2Lista usr lista str = do
 
     else do
         let filmesSTR = showMovies movies 1
-        printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
+        printTxt "./App/Menus/MenusTxt/MenuBuscaFilme2.txt"
         putStrLn filmesSTR
         putStr "\nId: "
         hFlush stdout
@@ -441,7 +441,7 @@ menuRemoveFilmeLista usr lista = do
 
 menuEdicaoUsuario :: User -> IO()
 menuEdicaoUsuario usr = do
-    printTxt "./App/Menus/MenuPerfil/Edicao.txt"
+    printTxt "./App/Menus/MenusTxt/Edicao.txt"
     putStrLn "\nSelecione uma opção: "
     hFlush stdout
     userChoice <- getLine
@@ -488,7 +488,7 @@ editUsername usr = do
 
 menuRecomendacao :: User -> IO()
 menuRecomendacao usr = do
-    printTxt "./App/Menus/MenuRecomendações/Recomendacao.txt"
+    printTxt "./App/Menus/MenusTxt/Recomendacao.txt"
     putStr "\n\nSelecione uma opção: "
     hFlush stdout
     userChoice <- getLine
@@ -506,7 +506,7 @@ menuRecomendacaoOptions usr userChoice
 
 menuRecomendacaoTop10 :: User -> IO()
 menuRecomendacaoTop10 usr = do
-    printTxt "./App/Menus/MenuRecomendações/CatalogoFilmes.txt"
+    printTxt "./App/Menus/MenusTxt/CatalogoFilmes.txt"
     putStrLn "\nSelecione uma opção: "
     hFlush stdout
     userChoice <- getLine
@@ -525,7 +525,7 @@ menuRecomendacaoTop10Option usr userChoice = do
 
 menuRecomendacaoTop10Exibicao :: User -> [Movie] -> IO()
 menuRecomendacaoTop10Exibicao usr mvies = do
-    printTxt "./App/Menus/logo.txt"
+    printTxt "./App/Menus/MenusTxt/logo.txt"
     putStrLn ("\n" ++ (replicate 41 '='))
     putStrLn (showMovies mvies 1)
     putStr "\nSelecione um filme: "
@@ -543,7 +543,7 @@ menuRecomendacaoTop10Exibicao usr mvies = do
 
 menuRecomendacoesPersonalizadas :: User -> IO()
 menuRecomendacoesPersonalizadas usr = do
-    printTxt "./App/Menus/MenuRecomendações/RecomendacoesPersonalizadas.txt"
+    printTxt "./App/Menus/MenusTxt/RecomendacoesPersonalizadas.txt"
     putStrLn ("\n" ++ (replicate 41 '='))
     let mviesFavoritos = filmes (listas usr !! 0)
 
