@@ -5,7 +5,7 @@ import App.Models.User ( User, createUser, idt, user, nome, bio, senha, listas)
 import App.Models.Lista ( Lista, idtL, nomeLista, filmes, createLista)
 import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarLinhaCSV)
 import App.Util.StringsOp( splitList, hGetContents2, splitOn, concatStrings)
-import App.Controllers.ListaController(getListaById, getListasById, getListas, listasToIdL, getLastId)
+import App.Controllers.ListaController(getListaById, getListasById, getListas, listasToIdL, getLastId, exibeListas)
 import qualified Data.Maybe
 import System.IO
 
@@ -70,3 +70,14 @@ exibeUsuarios :: [User] -> String
 exibeUsuarios [] = ""
 exibeUsuarios [x] = idt x ++ ". " ++ nome x
 exibeUsuarios (x:xs) = idt x ++ ". " ++ nome x ++ "\n" ++ exibeUsuarios xs
+
+exibePerfil :: User -> String
+exibePerfil usr = do
+    "\n" ++ replicate 41 '=' ++ "\n" ++ "            Perfil de Usuário          " ++ "\n"
+    ++ replicate 41 '=' ++ "\nNome:     " ++ nome usr
+    ++ "\n" ++ "Username: " ++ user usr
+    ++ "\n" ++ "Bio:      " ++ bio usr
+    ++ "\n" ++ replicate 41 '-' 
+    ++ "\n" ++ "             Listas de Filmes"
+    ++ "\n" ++ replicate 41 '-' ++ "\n" ++ exibeListas (listas usr) 1
+    ++ "\n" ++ replicate 41 '-'

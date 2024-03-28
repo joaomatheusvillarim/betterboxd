@@ -27,17 +27,6 @@ doLogin userName = do
     let usuario = Data.Maybe.fromJust $ getUserBy (getUsers 0) user userName
     writeCSV "./App/Data/Temp.csv" [[idt usuario]]
 
-searchMovieByID :: String -> Movie
-searchMovieByID str = (getMovies 0) !! ((read str) - 1)
-
-searchMovieByTittle :: String -> [Movie]
-searchMovieByTittle str = take 10 (getMoviesByTittle str (getMovies 0))
-
-showMovies :: [Movie] -> Int -> String
-showMovies [] _     = ""
-showMovies (x:[]) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x)
-showMovies (x:xs) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x) ++ "\n" ++ showMovies xs (n+1)
-
 commentMovie :: User -> Int -> String -> Movie -> IO()
 commentMovie usr nStar comment mvie = do
     appendComment (idt usr) nStar comment mvie
@@ -45,13 +34,6 @@ commentMovie usr nStar comment mvie = do
 changeComment :: Movie -> (String, Int, String) -> IO()
 changeComment mvie (a, b, c) = updteComment novosComment mvie
     where novosComment = editComment (comentarios mvie) (a,b,c)
-
--- pega a lista de filmes e pega do index do
-movieAtIndex :: Int -> [Movie] -> Maybe Movie
-movieAtIndex _ [] = Nothing
-movieAtIndex index (movie:rest)
-    | index == 1 = Just movie
-    | otherwise = movieAtIndex (index - 1) rest
 
 printMovieInfo :: Movie -> IO ()
 printMovieInfo movie = do
@@ -84,17 +66,6 @@ verificaComentUnico str [(x, y, z)] = str /= x
 verificaComentUnico str ((x, y, z):xs)
     | str == x      = False
     | otherwise     = verificaComentUnico str xs
-
-exibePerfil :: User -> String
-exibePerfil usr = do
-    "\n" ++ replicate 41 '=' ++ "\n" ++ "            Perfil de Usuário          " ++ "\n"
-    ++ replicate 41 '=' ++ "\nNome:     " ++ nome usr
-    ++ "\n" ++ "Username: " ++ user usr
-    ++ "\n" ++ "Bio:      " ++ bio usr
-    ++ "\n" ++ replicate 41 '-' 
-    ++ "\n" ++ "             Listas de Filmes"
-    ++ "\n" ++ replicate 41 '-' ++ "\n" ++ exibeListas (listas usr) 1
-    ++ "\n" ++ replicate 41 '-'
 
 criaLista :: String -> User -> IO()
 criaLista str usr = do

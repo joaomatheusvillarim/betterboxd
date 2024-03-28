@@ -2,16 +2,16 @@ module App.Menus.MenuManager where
 
 import Control.Concurrent ( threadDelay )
 import System.IO ( hFlush, stdout )
-import App.Controllers.UserController (getUserLogged, getUserBy, getUsers, editUser, exibeUsuarios)
+import App.Controllers.UserController (getUserLogged, getUserBy, getUsers, editUser, exibeUsuarios, exibePerfil)
 import App.Util.PrintUtil( printTxt )
 import App.Util.GetInfos( getUsernameCadastro, getPasswordCadastro, getUsernameLogin, getPasswordLogin, getNameCadastro, getBioCadastro, getNumberStars, getComentario)
 import App.Models.Movie (Movie, idtM, comentarios)
 import App.Models.User (User, idt, nome, user, bio, senha, listas, createUser)
-import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTittle , showMovies, movieAtIndex, printMovieInfo, commentMovie, searchMovieByID, verificaComentUnico, changeComment, exibePerfil, criaLista)
+import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, printMovieInfo, commentMovie, verificaComentUnico, changeComment, criaLista)
 import qualified Data.Maybe
 import App.Models.Lista (Lista (idtL, filmes))
 import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById, removeMovieFromLista, editLista)
-import App.Controllers.MovieController (getBestMoviesByGenre, getMovies, recomendaMovies)
+import App.Controllers.MovieController (getBestMoviesByGenre, getMovies, recomendaMovies, searchMovieByID, showMovies, searchMovieByTittle, movieAtIndex)
 
 menuInicial :: IO()
 menuInicial = do

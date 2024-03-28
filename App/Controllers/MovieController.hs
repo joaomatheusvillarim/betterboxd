@@ -70,11 +70,22 @@ moviesToIdString []     = ""
 moviesToIdString [x]    = idtM x
 moviesToIdString (x:xs) = idtM x ++ "," ++ moviesToIdString xs
 
+movieAtIndex :: Int -> [Movie] -> Maybe Movie
+movieAtIndex _ [] = Nothing
+movieAtIndex index (movie:rest)
+    | index == 1 = Just movie
+    | otherwise = movieAtIndex (index - 1) rest
+
 showMovies :: [Movie] -> Int -> String
 showMovies [] _     = ""
 showMovies (x:[]) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x)
 showMovies (x:xs) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x) ++ "\n" ++ showMovies xs (n+1)
 
+searchMovieByID :: String -> Movie
+searchMovieByID str = (getMovies 0) !! ((read str) - 1)
+
+searchMovieByTittle :: String -> [Movie]
+searchMovieByTittle str = take 10 (getMoviesByTittle str (getMovies 0))
 
 mostFrequentGender :: [Movie] -> String
 mostFrequentGender []       = ""
