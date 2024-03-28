@@ -9,7 +9,11 @@ getUsernameCadastro = do
     hFlush stdout
     username <- getLine
 
-    if hasUsername username then do
+    if (',' `elem` username) || (';' `elem` username) then do
+        putStrLn "\nAviso: Simbolo proibido utilizado"
+        getUsernameCadastro
+
+    else if hasUsername username then do
         putStrLn "\nAviso: O nome do usuário já está em uso."
         getUsernameCadastro
 
@@ -25,7 +29,11 @@ getNameCadastro = do
     hFlush stdout
     name <- getLine
 
-    if length name > 18 then do
+    if (',' `elem` name) || (';' `elem` name) then do
+        putStrLn "\nAviso: Simbolo proibido utilizado"
+        getNameCadastro
+
+    else if length name > 18 then do
         putStrLn "\nAviso: O seu nome deve ter no máximo 18 caracteres."
         getNameCadastro
 
@@ -35,7 +43,13 @@ getBioCadastro :: IO String
 getBioCadastro = do
     putStr "Digite a sua bio: "
     hFlush stdout
-    getLine
+    bio <- getLine
+
+    if (',' `elem` bio) || (';' `elem` bio) then do
+        putStrLn "\nAviso: Simbolo proibido utilizado"
+        getBioCadastro
+    
+    else return bio
 
 getPasswordCadastro :: IO String
 getPasswordCadastro = do
@@ -43,7 +57,11 @@ getPasswordCadastro = do
     hFlush stdout
     password <- getLine
 
-    if length password < 5 then do
+    if (',' `elem` password) || (';' `elem` password) then do
+        putStrLn "\nAviso: Simbolo proibido utilizado"
+        getPasswordCadastro
+
+    else if length password < 5 then do
         putStrLn "\nAviso: A senha deve ter no mínimo 5 digitos."
         getPasswordCadastro
 
@@ -71,9 +89,16 @@ getNumberStars = do
         getNumberStars
 
     else return (read n)
-    
+
 getComentario :: IO String
 getComentario = do
     putStr "Insira seu comentário: "
     hFlush stdout
-    getLine
+    coment <- getLine
+
+    if ('@' `elem` coment) || (';' `elem` coment) || ('-' `elem` coment) then do
+        putStrLn "\nAviso: Simbolo proibido utilizado"
+        getComentario
+
+    else return coment
+

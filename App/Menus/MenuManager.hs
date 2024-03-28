@@ -12,6 +12,7 @@ import qualified Data.Maybe
 import App.Models.Lista (Lista (idtL, filmes))
 import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById, removeMovieFromLista, editLista)
 import App.Controllers.MovieController (getBestMoviesByGenre, getMovies, recomendaMovies, searchMovieByID, showMovies, searchMovieByTittle, movieAtIndex)
+import Data.Char (isDigit)
 
 menuInicial :: IO()
 menuInicial = do
@@ -108,7 +109,7 @@ menuBuscaPerfil = do
 
 menuBuscaPerfil2 :: String -> [User] -> IO()
 menuBuscaPerfil2 userChoice users = do
-    if ((read userChoice) < 1 || (read userChoice) > length users) then do
+    if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length users)then do
         putStrLn "\nIndex inválido"
         threadDelay 700000
         menuBuscaPerfil
@@ -162,7 +163,7 @@ menuPerfilRecomendacao2 usr str= do
         putStr "Id: "
         hFlush stdout
         userChoice <- getLine
-        if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+        if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
             putStrLn "\nIndex inválido"
             threadDelay 700000
             menuPerfilRecomendacao2 usr str
@@ -186,7 +187,7 @@ menuSelecaoListaBusca usr = do
         menuBuscaPerfil
 
     else do 
-        if (length lists) < (read userChoice) || (read userChoice) < 1  then do
+        if not(all isDigit userChoice) || (length lists) < (read userChoice) || (read userChoice) < 1  then do
             putStrLn "\nERROR: ID inválido"
             threadDelay 1400000
             menuBuscaPerfil
@@ -237,7 +238,7 @@ menuBuscaFilme2 str = do
         putStr "\nId: "
         hFlush stdout
         userChoice <- getLine
-        if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+        if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
             putStrLn "\nIndex inválido"
             threadDelay 700000
             menuBuscaFilme2 str
@@ -353,7 +354,7 @@ menuSelecaoLista usr = do
         menuPerfil usr
 
     else do 
-        if (length lists) < (read userChoice) || (read userChoice) < 1  then do
+        if not(all isDigit userChoice) || (length lists) < (read userChoice) || (read userChoice) < 1  then do
             putStrLn "\nERROR: ID inválido"
             threadDelay 1400000
             menuPerfil usr
@@ -411,7 +412,7 @@ menuBuscaFilme2Lista usr lista str = do
         putStr "\nId: "
         hFlush stdout
         userChoice <- getLine
-        if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+        if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
             putStrLn "\nIndex inválido"
             threadDelay 700000
             menuBuscaFilme2Lista usr lista str
@@ -427,7 +428,7 @@ menuSelecionaFilme usr lista = do
     putStr "\nId: "
     hFlush stdout
     userChoice <- getLine
-    if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+    if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
         putStrLn "\nIndex inválido"
         threadDelay 700000
         menuSelecionaFilme usr lista
@@ -442,7 +443,7 @@ menuRemoveFilmeLista usr lista = do
     putStr "\nId: "
     hFlush stdout
     userChoice <- getLine
-    if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+    if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
         putStrLn "\nIndex inválido"
         threadDelay 700000
         menuRemoveFilmeLista usr lista
@@ -528,7 +529,7 @@ menuRecomendacaoTop10 usr = do
 menuRecomendacaoTop10Option :: User -> String -> IO()
 menuRecomendacaoTop10Option usr userChoice = do
     let generos = ["Comedy", "Drama", "Romance", "Sci-Fi", "Horror", "Documentary", "Biography", "History" , "Adventure", "Action", "Fantasy", "Crime", "Kids & Family", "Animation", "LGBTQ+", "Musical", "War", "Mystery & Thriller", "Music", "Holiday", "Western", "Sports"]
-    if (read userChoice < 1) || (read userChoice > 22) then do
+    if not(all isDigit userChoice) || (read userChoice < 1) || (read userChoice > 22) then do
         putStrLn "\nError, id invalido"
         threadDelay 700000
         menuRecomendacaoTop10 usr
@@ -545,7 +546,7 @@ menuRecomendacaoTop10Exibicao usr mvies = do
     hFlush stdout
     userChoice <- getLine
 
-    if (read userChoice < 1) || (read userChoice > (length mvies)) then do
+    if not(all isDigit userChoice) || (read userChoice < 1) || (read userChoice > (length mvies)) then do
         putStrLn "\nError, id invalido"
         threadDelay 700000
         menuRecomendacaoTop10Exibicao usr mvies
@@ -572,7 +573,7 @@ menuRecomendacoesPersonalizadas usr = do
         putStr "\nId: "
         hFlush stdout
         userChoice <- getLine
-        if ((read userChoice) < 1 || (read userChoice) > length mvies) then do
+        if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length mvies) then do
             putStrLn "\nIndex inválido"
             threadDelay 700000
             menuRecomendacao usr
