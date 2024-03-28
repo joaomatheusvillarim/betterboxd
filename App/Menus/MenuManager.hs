@@ -131,12 +131,47 @@ menuBuscaPerfil2 userChoice users = do
 menuBuscaPerfil2Options :: String -> User -> IO()
 menuBuscaPerfil2Options userChoice usr
     | userChoice == "S" || userChoice == "s"    = menuSelecaoListaBusca usr
-    | userChoice == "R" || userChoice == "r"    = print ""
+    | userChoice == "R" || userChoice == "r"    = menuPerfilRecomendacao usr
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
         threadDelay 700000
         menuBuscaPerfil
+
+menuPerfilRecomendacao :: User -> IO()
+menuPerfilRecomendacao usr = do
+    printTxt "./App/Menus/MenuBusca/MenuBuscaFilme.txt"
+    hFlush stdout
+    userChoice <- getLine
+    menuPerfilRecomendacao2 usr userChoice
+
+menuPerfilRecomendacao2 :: User -> String -> IO()
+menuPerfilRecomendacao2 usr str= do
+    let movies = searchMovieByTittle str
+
+    if (length movies < 1) then do
+        putStrLn "\nNenhum retorno válido"
+        threadDelay 700000
+        menuPerfilRecomendacao usr
+
+    else do
+        let filmesSTR = showMovies movies 1
+        printTxt "./App/Menus/MenuBusca/MenuBuscaFilme2.txt"
+        putStrLn filmesSTR
+        putStr "Id: "
+        hFlush stdout
+        userChoice <- getLine
+        if ((read userChoice) < 1 || (read userChoice) > length movies) then do
+            putStrLn "\nIndex inválido"
+            threadDelay 700000
+            menuPerfilRecomendacao2 usr str
+
+        else do
+            appendMovieToLista (listas usr !! 2) (movies !! ((read userChoice) -1))
+            putStrLn "Filme Recomendado com sucesso"
+            threadDelay 700000
+            menuBuscaPerfil
+
 
 menuSelecaoListaBusca :: User -> IO()
 menuSelecaoListaBusca usr = do
