@@ -16,5 +16,16 @@
 ----------------------------------------
 |         Betterboxd - Recomendações    |
 ----------------------------------------
-Com base no que você assistiu anteriormente, sugerimos alguns filmes que você pode gostar:
-~
+Selecione um dos gêneros a seguir:
+
+1. Comedia	        | 12. Biography
+2. Drama	        | 13. Historia
+3. Romance    	    | 14. Aventura
+4. Sci-Fi   	    | 15. Ação
+5. Terror    	    | 16. Fantasia
+6. Documentários    | 17. Crime
+7. Kids & Family    | 18. Mistério e Suspense
+8. Animação	        | 19. Música
+9. LGBTQ+	        | 20. Festividades
+10. Musical	        | 21. Faroeste
+11. Guerra	        | 22. Esportes
