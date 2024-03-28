@@ -41,6 +41,10 @@ removeBy _ [] _ = []
 removeBy func (x:xs) result
     | func x == result  = removeBy func xs result
     | otherwise         = x : removeBy func xs result
+
+removeFrom :: Eq b => (a -> b) -> [a] -> [a] -> [a]
+removeFrom f xs ys = [x | x <- xs, not (f x `elem` mappedYs)]
+    where mappedYs = map f ys
     
 mostFrequentElement :: (Ord b) => (a -> [b]) -> [a] -> b
 mostFrequentElement f xs = mostFreq $ concatMap f xs

@@ -2,7 +2,7 @@ module App.Controllers.MovieController where
 
 import Data.List
 import Data.Char
-import App.Util.SortSearch (msort, searchBy, searchsBy, mostFrequentElement, secondMostFrequentElement)
+import App.Util.SortSearch (msort, searchBy, searchsBy, mostFrequentElement, secondMostFrequentElement, removeFrom)
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors, createMovie, comentarios)
 import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarIndice, editarLinhaCSV)
 import App.Util.StringsOp (splitOn, stringToTuples, hGetContents2, concatStrings)
@@ -27,9 +27,6 @@ getMovieById str mvies = searchBy idtM mvies str
 
 getMoviesById :: [String] -> [Movie] -> [Movie]
 getMoviesById ids mvies = searchsBy idtM mvies ids
-
-{- 'Comedy', 'Drama', 'Romance', 'Sci-Fi', 'Horror', 'Documentary', 'Biography', 'History', 'Adventure', 'Action', 'Fantasy', 'Crime',
- 'Kids & Family', 'Animation', 'LGBTQ+', 'Musical', 'War', 'Mystery & Thriller', 'Music', 'Holiday', 'Western', 'Sports' -}
 
 getMoviesByGenre :: String -> [Movie] -> [Movie]
 getMoviesByGenre _ []      = []
@@ -95,8 +92,8 @@ mostFrequentDirector :: [Movie] -> String
 mostFrequentDirector []     = ""
 mostFrequentDirector mvies  = mostFrequentElement  directors mvies 
 
-recomendaMovies :: [Movie] -> [Movie]
-recomendaMovies mviesFavoritos = getBestMoviesByGenre segundoGeneroFav 10 indicacaoParcial
+recomendaMovies :: [Movie] -> [Movie] -> [Movie]
+recomendaMovies mviesFavoritos mviesAssistidos  = getBestMoviesByGenre segundoGeneroFav 10 (removeFrom idtM indicacaoParcial (mviesFavoritos ++ mviesAssistidos))
     where   generoFavorito      = mostFrequentGender mviesFavoritos
             segundoGeneroFav    = secondMostFrequentGender mviesFavoritos
             indicacaoParcial    = getMoviesByGenre generoFavorito (getMovies 0) 
