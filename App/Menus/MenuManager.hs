@@ -540,3 +540,7 @@ menuRecomendacaoTop10Exibicao usr mvies = do
     else do
         printMovieInfo (mvies !! ((read userChoice) -1))
         menuFilme (mvies !! ((read userChoice) -1))
+
+menuRecomendacoesPersonalizadas :: User -> IO()
+menuRecomendacoesPersonalizadas usr = do
+    putStrLn "a"

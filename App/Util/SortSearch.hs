@@ -41,7 +41,7 @@ removeBy _ [] _ = []
 removeBy func (x:xs) result
     | func x == result  = removeBy func xs result
     | otherwise         = x : removeBy func xs result
-
+    
 mostFrequentElement :: (Ord b) => (a -> [b]) -> [a] -> b
 mostFrequentElement f xs = mostFreq $ concatMap f xs
   where
@@ -52,3 +52,7 @@ groupSort = group . sort
   where
     group [] = []
     group (x:xs) = (x : takeWhile (==x) xs) : group (dropWhile (==x) xs)
+
+secondMostFrequentElement :: (Ord b) => (a -> [b]) -> [a] -> b
+secondMostFrequentElement f xs = head ((mostFreq $ concatMap f xs) !! 1)
+    where mostFreq = msort (length) . groupSort
