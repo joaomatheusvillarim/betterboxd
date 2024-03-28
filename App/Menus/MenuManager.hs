@@ -496,7 +496,7 @@ menuRecomendacao usr = do
 
 menuRecomendacaoOptions :: User -> String -> IO()
 menuRecomendacaoOptions usr userChoice
-    | userChoice == "T" || userChoice == "t"    = menuRecomendacaoTop10 usr
+    | userChoice == "M" || userChoice == "m"    = menuRecomendacaoTop10 usr
     | userChoice == "R" || userChoice == "r"    = print ""
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do

@@ -16,6 +16,6 @@
 ----------------------------------------
 |       Betterboxd - Recomendações     |
 ----------------------------------------
-(T)OP 10 filmes por gênero
+(M)ELHORES filmes por gênero
 (R)ECOMENDAÇÕES personalizadas 
 (V)OLTAR
