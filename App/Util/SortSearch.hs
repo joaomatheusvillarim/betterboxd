@@ -1,6 +1,9 @@
 module App.Util.SortSearch where
 
 import qualified Data.Maybe
+import Data.List (maximumBy, sort)
+import Data.Function (on)
+import Data.Ord (comparing)
 
 merge :: (a -> Int) -> [a] -> [a] -> [a]
 merge _ [] ys         = ys
@@ -38,3 +41,14 @@ removeBy _ [] _ = []
 removeBy func (x:xs) result
     | func x == result  = removeBy func xs result
     | otherwise         = x : removeBy func xs result
+
+mostFrequentElement :: (Ord b) => (a -> [b]) -> [a] -> b
+mostFrequentElement f xs = mostFreq $ concatMap f xs
+  where
+    mostFreq = head . maximumBy (comparing length) . groupSort
+
+groupSort :: (Ord a) => [a] -> [[a]]
+groupSort = group . sort
+  where
+    group [] = []
+    group (x:xs) = (x : takeWhile (==x) xs) : group (dropWhile (==x) xs)

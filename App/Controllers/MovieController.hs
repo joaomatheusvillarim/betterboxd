@@ -2,7 +2,7 @@ module App.Controllers.MovieController where
 
 import Data.List
 import Data.Char
-import App.Util.SortSearch (msort, searchBy, searchsBy)
+import App.Util.SortSearch (msort, searchBy, searchsBy, mostFrequentElement)
 import App.Models.Movie (Movie, idtM, tittle, rating, genres, year, actors, directors, createMovie, comentarios)
 import App.Data.CsvManager ( Matriz, readCSV, writeCSV, appendCSV, editMatriz, editarIndice, editarLinhaCSV)
 import App.Util.StringsOp (splitOn, stringToTuples, hGetContents2, concatStrings)
@@ -77,3 +77,16 @@ showMovies :: [Movie] -> Int -> String
 showMovies [] _     = ""
 showMovies (x:[]) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x)
 showMovies (x:xs) n = (show n) ++ ". " ++ (tittle x) ++ ", " ++  show (year x) ++ "\n" ++ showMovies xs (n+1)
+
+
+mostFrequentGender :: [Movie] -> String
+mostFrequentGender []       = ""
+mostFrequentGender mvies    = mostFrequentElement  genres mvies
+
+mostFrequentActor :: [Movie] -> String
+mostFrequentActor []    = ""
+mostFrequentActor mvies = mostFrequentElement  actors mvies
+
+mostFrequentDirector :: [Movie] -> String
+mostFrequentDirector []     = ""
+mostFrequentDirector mvies  = mostFrequentElement  directors mvies 
