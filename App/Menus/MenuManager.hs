@@ -120,10 +120,63 @@ menuBuscaPerfil2 userChoice users = do
             printTxt "./App/Menus/logo.txt"
             putStrLn (exibePerfil userEscolhido)
             putStrLn ""
-            --menubusca3 implementacao em breve
+            putStrLn "(S)ELECIONAR Lista"
+            putStrLn "(R)ECOMENDAR Filme"
+            putStrLn "(V)OLTAR"
+            putStr "\nSelecione uma opção: "
+            hFlush stdout
+            userChoice <- getLine
+            menuBuscaPerfil2Options userChoice userEscolhido
 
+menuBuscaPerfil2Options :: String -> User -> IO()
+menuBuscaPerfil2Options userChoice usr
+    | userChoice == "S" || userChoice == "s"    = menuSelecaoListaBusca usr
+    | userChoice == "R" || userChoice == "r"    = print ""
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
+    | otherwise = do
+        putStrLn "\nOpção Inválida!"
+        threadDelay 700000
+        menuBuscaPerfil
+
+menuSelecaoListaBusca :: User -> IO()
+menuSelecaoListaBusca usr = do
+    let lists = listas usr
+    putStr "\nId: "
+    userChoice <- getLine
     
+    if(length lists) < 1 then do
+        putStrLn "\nO usuário não possui nenhuma lista."
+        threadDelay 1400000
+        menuBuscaPerfil
 
+    else do 
+        if (length lists) < (read userChoice) || (read userChoice) < 1  then do
+            putStrLn "\nERROR: ID inválido"
+            threadDelay 1400000
+            menuBuscaPerfil
+        else do
+            menuSelecaoListaBusca2 usr (lists !! (read userChoice -1)) 
+
+menuSelecaoListaBusca2 :: User -> Lista -> IO()
+menuSelecaoListaBusca2 usr lista = do
+    printTxt "./App/Menus/logo.txt"
+    putStrLn (exibeLista lista)
+    putStrLn (replicate 40 '=')
+    putStrLn "(S)ELECIONAR Filme"
+    putStrLn "(V)OLTAR"
+    putStrLn "\nSelecione uma opção: "
+    hFlush stdout
+    userChoice <- getLine
+    menuSelecaoListaBuscaOptions usr lista userChoice
+
+menuSelecaoListaBuscaOptions :: User -> Lista -> String -> IO()
+menuSelecaoListaBuscaOptions usr lista userChoice
+    | userChoice == "S" || userChoice == "s"    = menuSelecionaFilme usr lista
+    | userChoice == "V" || userChoice == "v"    = menuPrincipal
+    | otherwise = do
+        putStrLn "\nOpção Inválida!"
+        threadDelay 700000
+        menuSelecaoListaBusca2 usr lista
 
 menuBuscaFilme1 :: IO()
 menuBuscaFilme1 = do
