@@ -11,7 +11,7 @@ import App.Betterboxd ( cadastraUsuario, isLoginValid, doLogin, searchMovieByTit
 import qualified Data.Maybe
 import App.Models.Lista (Lista (idtL, filmes))
 import App.Controllers.ListaController (exibeLista, appendMovieToLista, getListas, getListaById, removeMovieFromLista, editLista)
-import App.Controllers.MovieController (getBestMoviesByGenre, getMovies)
+import App.Controllers.MovieController (getBestMoviesByGenre, getMovies, recomendaMovies)
 
 menuInicial :: IO()
 menuInicial = do
@@ -497,7 +497,7 @@ menuRecomendacao usr = do
 menuRecomendacaoOptions :: User -> String -> IO()
 menuRecomendacaoOptions usr userChoice
     | userChoice == "M" || userChoice == "m"    = menuRecomendacaoTop10 usr
-    | userChoice == "R" || userChoice == "r"    = print ""
+    | userChoice == "R" || userChoice == "r"    = menuRecomendacoesPersonalizadas usr
     | userChoice == "V" || userChoice == "v"    = menuPrincipal
     | otherwise = do
         putStrLn "\nOpção Inválida!"
@@ -543,4 +543,28 @@ menuRecomendacaoTop10Exibicao usr mvies = do
 
 menuRecomendacoesPersonalizadas :: User -> IO()
 menuRecomendacoesPersonalizadas usr = do
-    putStrLn "a"
+    printTxt "./App/Menus/MenuRecomendações/RecomendacoesPersonalizadas.txt"
+    putStrLn ("\n" ++ (replicate 41 '='))
+    let mviesFavoritos = filmes (listas usr !! 0)
+
+    if (length mviesFavoritos == 0) then do
+        putStrLn "\nError, você não possui nenhum favorito"
+        threadDelay 700000
+        menuRecomendacao usr
+    
+    else do
+        let mviesAssistidos = filmes (listas usr !! 1)
+        let mvies = recomendaMovies mviesFavoritos  mviesAssistidos
+        putStrLn (showMovies mvies 1)
+        putStr "\nId: "
+        hFlush stdout
+        userChoice <- getLine
+        if ((read userChoice) < 1 || (read userChoice) > length mvies) then do
+            putStrLn "\nIndex inválido"
+            threadDelay 700000
+            menuRecomendacao usr
+
+        else do
+            printMovieInfo (mvies !! ((read userChoice) -1))
+            menuFilme (mvies !! ((read userChoice) -1))
+
