@@ -53,7 +53,7 @@ exibeListas [x] n       = (show n) ++ ". " ++ nomeLista x
 exibeListas (x:xs) n    = (show n) ++ ". " ++ nomeLista x ++ "\n" ++ exibeListas xs (n + 1)
 
 exibeLista :: Lista -> String
-exibeLista lista = "\n" ++ replicate 41 '=' ++ "\n" ++ "            Filmes de " ++ nomeLista lista ++ "\n"
+exibeLista lista = "\n" ++ replicate 41 '=' ++ "\n" ++ "   Filmes de " ++ nomeLista lista ++ "\n"
                     ++ replicate 41 '=' ++ "\n" ++ showMovies (filmes lista) 1
 
 removeMovieFromLista :: Lista -> String -> Lista

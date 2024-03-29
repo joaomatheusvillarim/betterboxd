@@ -401,9 +401,9 @@ menuBuscaFilme2Lista usr lista str = do
     let movies = searchMovieByTittle str
 
     if (length movies < 1) then do
-        putStrLn "\nNenhum retorno válido"
+        putStrLn "\nNenhum retorno válido, voltando ao Menu Principal"
         threadDelay 700000
-        menuBuscaFilmeLista usr lista
+        menuPrincipal
 
     else do
         let filmesSTR = showMovies movies 1
@@ -425,32 +425,44 @@ menuBuscaFilme2Lista usr lista str = do
 menuSelecionaFilme :: User -> Lista -> IO()
 menuSelecionaFilme usr lista = do
     let movies = filmes lista
-    putStr "\nId: "
-    hFlush stdout
-    userChoice <- getLine
-    if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
-        putStrLn "\nIndex inválido"
+
+    if length movies == 0 then do
+        putStrLn "\nLista Vazia, retornando ao Menu Principal"
         threadDelay 700000
-        menuSelecionaFilme usr lista
-        
+        menuPrincipal
     else do
-        printMovieInfo (movies !! ((read userChoice) -1))
-        menuFilme (movies !! ((read userChoice) -1))
+        putStr "\nId: "
+        hFlush stdout
+        userChoice <- getLine
+        if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
+            putStrLn "\nIndex inválido"
+            threadDelay 700000
+            menuSelecionaFilme usr lista
+            
+        else do
+            printMovieInfo (movies !! ((read userChoice) -1))
+            menuFilme (movies !! ((read userChoice) -1))
 
 menuRemoveFilmeLista :: User -> Lista -> IO()
 menuRemoveFilmeLista usr lista = do
     let movies = filmes lista
-    putStr "\nId: "
-    hFlush stdout
-    userChoice <- getLine
-    if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
-        putStrLn "\nIndex inválido"
+
+    if length movies == 0 then do
+        putStrLn "\nLista Vazia, retornando ao Menu"
         threadDelay 700000
-        menuRemoveFilmeLista usr lista
-        
+        menuSelecaoLista2 usr lista
     else do
-        editLista (removeMovieFromLista lista (idtM (movies !! ((read userChoice) -1))))
-        menuSelecaoLista2 usr (Data.Maybe.fromJust (getListaById (idtL lista) (getListas 0)))
+        putStr "\nId: "
+        hFlush stdout
+        userChoice <- getLine
+        if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length movies) then do
+            putStrLn "\nIndex inválido"
+            threadDelay 700000
+            menuRemoveFilmeLista usr lista
+            
+        else do
+            editLista (removeMovieFromLista lista (idtM (movies !! ((read userChoice) -1))))
+            menuSelecaoLista2 usr (Data.Maybe.fromJust (getListaById (idtL lista) (getListas 0)))
 
 
 menuEdicaoUsuario :: User -> IO()
@@ -569,16 +581,22 @@ menuRecomendacoesPersonalizadas usr = do
     else do
         let mviesAssistidos = filmes (listas usr !! 1)
         let mvies = recomendaMovies mviesFavoritos  mviesAssistidos
-        putStrLn (showMovies mvies 1)
-        putStr "\nId: "
-        hFlush stdout
-        userChoice <- getLine
-        if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length mvies) then do
-            putStrLn "\nIndex inválido"
-            threadDelay 700000
-            menuRecomendacao usr
+
+        if (length mvies == 0) then do
+            putStrLn "\nNenhum Filme Encontrado, retornando ao Menu Principal"
+            menuPrincipal
 
         else do
-            printMovieInfo (mvies !! ((read userChoice) -1))
-            menuFilme (mvies !! ((read userChoice) -1))
+            putStrLn (showMovies mvies 1)
+            putStr "\nId: "
+            hFlush stdout
+            userChoice <- getLine
+            if (not(all isDigit userChoice) || (read userChoice) < 1 || (read userChoice) > length mvies) then do
+                putStrLn "\nIndex inválido"
+                threadDelay 700000
+                menuRecomendacao usr
+
+            else do
+                printMovieInfo (mvies !! ((read userChoice) -1))
+                menuFilme (mvies !! ((read userChoice) -1))
 
