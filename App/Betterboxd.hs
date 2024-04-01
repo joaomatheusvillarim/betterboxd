@@ -43,11 +43,12 @@ printMovieInfo movie = do
     putStrLn $ replicate 30 ' ' ++ "Informações do Filme"
     putStrLn ""
     putStrLn $ replicate 80 '*'
-    putStrLn $ " Título:        " ++ tittle movie
-    putStrLn $ " Rating:        " ++ show (rating movie)
-    putStrLn $ " Ano:           " ++ show (year movie)
-    putStrLn $ " Atores:        " ++ concatStrings (actors movie) ", "
-    putStrLn $ " Diretor:       " ++ concatStrings (directors movie) ", "
+    putStrLn $ " Título:          " ++ tittle movie
+    putStrLn $ " Rating:          " ++ show (rating movie)
+    putStrLn $ avaliacaoBbxd (comentarios movie)
+    putStrLn $ " Ano:             " ++ show (year movie)
+    putStrLn $ " Atores:          " ++ concatStrings (actors movie) ", "
+    putStrLn $ " Diretor:         " ++ concatStrings (directors movie) ", "
     putStrLn $ replicate 80 '*'
     putStrLn " Comentários:"
     if null (comentarios movie)
@@ -59,6 +60,17 @@ printMovieInfo movie = do
     where
         stars :: Int -> String
         stars n = replicate n '*' ++ replicate (5 - n) '°'
+
+        avaliacaoBbxd :: [(String, Int, String)] -> String
+        avaliacaoBbxd [] = " Avaliação média: Nenhuma avalição realizada"
+        avaliacaoBbxd tuplas =
+            let valores = map (\(_, x, _) -> x) tuplas
+                soma = sum valores
+                total = fromIntegral (length valores)
+                media = div soma  total
+            in " Avaliação média: " ++ show media ++ " estrelas"
+
+
 
 verificaComentUnico :: String -> [(String, Int, String)] -> Bool
 verificaComentUnico _ []            = True
