@@ -1,7 +1,7 @@
 :- set_prolog_flag(encoding, utf8).
 
 lerArquivo(NomeArquivo) :-
-    atom_concat('App/Menus/', NomeArquivo, NovoCaminho),
+    atom_concat('App/Menus/MenusTxt/', NomeArquivo, NovoCaminho),
     open(NovoCaminho, read, Stream),
     lerLinhas(Stream),
     close(Stream).                       
