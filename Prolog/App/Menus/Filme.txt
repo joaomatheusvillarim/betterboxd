@@ -1,0 +1,3 @@
+(C)OMENTAR e avaliar filme
+(A)LTERAR comentário
+(V)OLTAR ao menu principal
