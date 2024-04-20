@@ -83,12 +83,8 @@ menuBuscaPerfil:-
     menuBuscaPerfil2(Id,Users).
 
 menuBuscaPerfil2(Id,Users):-
-    (not(isDigit(Id)),Id <1,length(Users,Length),Id > Length ->
-        nl,
-        write('Index inválido'),
-        menuBuscaPerfil
-    ;
-        nth0(Id,Users,UserEscolhido),
+    (isDigit(Id),Id >=1,length(Users,Length),Id =< Length ->
+         nth0(Id,Users,UserEscolhido),
         getUserLogged(UserLogado),
         ( idt(UserEscolhido) = idt(UserLogado) ->
             menuPerfil(UserEscolhido)
@@ -103,6 +99,69 @@ menuBuscaPerfil2(Id,Users):-
             read(UserChoice),
             menuBuscaPerfil2Options(UserChoice,UserEscolhido)
         )
+    ;
+        nl,
+        write('Index inválido'),
+        menuBuscaPerfil
     ).
 
-    
+menuBuscaPerfil2Options('S',User):- menuSelecaoListaBusca(User),!.
+menuBuscaPerfil2Options('s',User):- menuSelecaoListaBusca(User),!.
+menuBuscaPerfil2Options('R',User):- menuPerfilRecomendacao(User),!.
+menuBuscaPerfil2Options('r',User):- menuPerfilRecomendacao(User),!.
+menuBuscaPerfil2Options('V',User):- menuPrincipal,!.
+menuBuscaPerfil2Options('v',User):- menuPrincipal,!.
+menuBuscaPerfil2Options(_,User):- write('Opção Inválida!'),menuBuscaPerfil,!.
+
+menuPerfilRecomendacao(User):-
+    lerArquivo('MenuBuscaFilme.txt'),
+    read(UserChoice),
+    menuPerfilRecomendacao2(User,UserChoice).
+
+menuPerfilRecomendacao2(User,UserChoice):-
+    searchMovieByTittle(UserChoice,Movies),
+    length(Movies,Tamanho),
+    (Tamanho <1 ->
+        write('Nenhum retorno válido'),
+        menuPerfilRecomendacao(User)
+    ;
+        showMovies(Movies,1,FilmesSTR),
+        lerArquivo('MenuBuscaFilme2.txt'),
+        writeln(FilmesSTR),
+        write('Id: '),
+        read(Id),
+        (isDigit(Id),Id >=1,Id =< Tamanho ->
+            lista(User,Lista),
+            nth0(2,Lista,Resultado1),
+            Escolha is UserChoice -1,
+            nth0(Escolha,Movies,Resultado2),
+            appendMovieToLista(Resultado1,Resultado2),
+            write('Filme Recomendado com sucesso'),
+            menuBuscaPerfil
+        ;
+            nl,
+            writeln('Index inválido'),
+            menuPerfilRecomendacao2(User,UserChoice)
+        )
+    ).
+
+menuSelecaoListaBusca(User):-
+    listas(User,Lists),
+    writeln('Id: '),
+    read(UserChoice),
+    length(Lists,Length),
+    (Length < 1->
+        ln,
+        writeln('O usuário não possui nenhuma lista.'),
+        menuBuscaPerfil
+    ;
+        (isDigit(UserChoice),Length >= UserChoice,UserChoice >= 1 ->
+            Indice is UserChoice -1,
+            nth0(Indice,Lists,Resultado),
+            menuSelecaoListaBusca2(User,Resultado)
+
+        ;
+            write('ERROR: ID inválido'),
+            menuBuscaPerfil
+        )
+    ).
