@@ -4,18 +4,16 @@
 
 
 menuInicial :-
-    
     lerArquivo('MenuInicial.txt'),
-    write('Selecione uma opção: '),
-    read(X),
+    getString('Selecione uma opção: ', X),
     optionsMenuInicial(X).
 
-optionsMenuInicial('E'):- menuLogin,!.
-optionsMenuInicial('e'):- menuLogin,!.
-optionsMenuInicial('C'):- menuCadastro,!.
-optionsMenuInicial('c'):- menuCadastro,!.
-optionsMenuInicial('S'):- write(''), !.
-optionsMenuInicial('s'):- write(''), !.
+optionsMenuInicial(X):- atom_string('E', X), menuLogin,!.
+optionsMenuInicial(X):- atom_string('e', X), menuLogin,!.
+optionsMenuInicial(X):- atom_string('C', X), menuCadastro,!.
+optionsMenuInicial(X):- atom_string('c', X), menuCadastro,!.
+optionsMenuInicial(X):- atom_string('S', X), write(''), !.
+optionsMenuInicial(X):- atom_string('s', X), write(''), !.
 optionsMenuInicial(_) :- writeln('Opção inválida!'), menuInicial.
 
 menuLogin :-
@@ -42,33 +40,31 @@ menuCadastro:-
 
 menuPrincipal :-
     lerArquivo('MenuPrincipal.txt'),
-    write('Selecione uma opção: '),
-    read(X),
+    getString('Selecione uma opção: ', X),
     getUserLogged(User),
     optionsMenuPrincipal(X,User).
     
-optionsMenuPrincipal('V'):- menuPerfil(User),!.
-optionsMenuPrincipal('v'):- menuPerfil(User),!.
-optionsMenuPrincipal('B'):- menuBusca1,!.
-optionsMenuPrincipal('b'):- menuBusca1,!.
-optionsMenuPrincipal('R'):- menuRecomendacao(User),!.
-optionsMenuPrincipal('r'):- menuRecomendacao(User),!.
-optionsMenuPrincipal('S'):- write(''), !.
-optionsMenuPrincipal('s'):- write(''), !.
+optionsMenuPrincipal(X):- atom_string('V', X), menuPerfil(User),!.
+optionsMenuPrincipal(X):- atom_string('v', X), menuPerfil(User),!.
+optionsMenuPrincipal(X):- atom_string('B', X), menuBusca1,!.
+optionsMenuPrincipal(X):- atom_string('b', X), menuBusca1,!.
+optionsMenuPrincipal(X):- atom_string('R', X), menuRecomendacao(User),!.
+optionsMenuPrincipal(X):- atom_string('r', X), menuRecomendacao(User),!.
+optionsMenuPrincipal(X):- atom_string('S', X), write(''), !.
+optionsMenuPrincipal(X):- atom_string('s', X), write(''), !.
 optionsMenuPrincipal(_) :- writeln('Opção inválida!'), menuPrincipal.
 
 menuBusca1:-
     lerArquivo('MenuBusca1.txt'),
-    write('Selecione uma opção: '),
-    read(Opcao),
+    getString('Selecione uma opção: ', Opcao),
     optionsMenuBusca1(Opcao).
 
-optionsMenuBusca1('F'):- menuBuscaFilme1,!.
-optionsMenuBusca1('f'):- menuBuscaFilme1,!.
-optionsMenuBusca1('P'):- menuBuscaPerfil,!.
-optionsMenuBusca1('p'):- menuBuscaPerfil,!.
-optionsMenuBusca1('V'):- menuPrincipal, !.
-optionsMenuBusca1('v'):- menuPrincipal, !.
+optionsMenuBusca1(X):- atom_string('F', X), menuBuscaFilme1,!.
+optionsMenuBusca1(X):- atom_string('f', X), menuBuscaFilme1,!.
+optionsMenuBusca1(X):- atom_string('P', X), menuBuscaPerfil,!.
+optionsMenuBusca1(X):- atom_string('p', X), menuBuscaPerfil,!.
+optionsMenuBusca1(X):- atom_string('V', X), menuPrincipal, !.
+optionsMenuBusca1(X):- atom_string('v', X), menuPrincipal, !.
 optionsMenuBusca1(_) :- writeln('Opção inválida!'), menuInicial.
 
 menuBuscaPerfil:-
@@ -78,8 +74,7 @@ menuBuscaPerfil:-
     nl,
     exibeUsuarios(Users),
     n1,
-    write('Id: '),
-    read(Id),
+    getInt('Id: ', Id),
     menuBuscaPerfil2(Id,Users).
 
 menuBuscaPerfil2(Id,Users):-
@@ -95,8 +90,8 @@ menuBuscaPerfil2(Id,Users):-
             writeln('(S)ELECIONAR Lista'),
             writeln('(R)ECOMENDAR Filme'),
             writeln('(V)OLTAR'),
-            nl,write('Selecione uma opção: '),
-            read(UserChoice),
+            nl,
+            getString('Selecione uma opção: ', UserChoice),
             menuBuscaPerfil2Options(UserChoice,UserEscolhido)
         )
     ;
@@ -105,17 +100,17 @@ menuBuscaPerfil2(Id,Users):-
         menuBuscaPerfil
     ).
 
-menuBuscaPerfil2Options('S',User):- menuSelecaoListaBusca(User),!.
-menuBuscaPerfil2Options('s',User):- menuSelecaoListaBusca(User),!.
-menuBuscaPerfil2Options('R',User):- menuPerfilRecomendacao(User),!.
-menuBuscaPerfil2Options('r',User):- menuPerfilRecomendacao(User),!.
-menuBuscaPerfil2Options('V',User):- menuPrincipal,!.
-menuBuscaPerfil2Options('v',User):- menuPrincipal,!.
+menuBuscaPerfil2Options(X,User):- atom_string('S', X),  menuSelecaoListaBusca(User),!.
+menuBuscaPerfil2Options(X,User):- atom_string('s', X), menuSelecaoListaBusca(User),!.
+menuBuscaPerfil2Options(X,User):- atom_string('R', X), menuPerfilRecomendacao(User),!.
+menuBuscaPerfil2Options(X,User):- atom_string('r', X), menuPerfilRecomendacao(User),!.
+menuBuscaPerfil2Options(X,User):- atom_string('V', X), menuPrincipal,!.
+menuBuscaPerfil2Options(X,User):- atom_string('v', X), menuPrincipal,!.
 menuBuscaPerfil2Options(_,User):- writeln('Opção Inválida!'),menuBuscaPerfil,!.
 
 menuPerfilRecomendacao(User):-
     lerArquivo('MenuBuscaFilme.txt'),
-    read(UserChoice),
+    getString(' ', UserChoice),
     menuPerfilRecomendacao2(User,UserChoice).
 
 menuPerfilRecomendacao2(User,UserChoice):-
@@ -128,8 +123,7 @@ menuPerfilRecomendacao2(User,UserChoice):-
         showMovies(Movies,1,FilmesSTR),
         lerArquivo('MenuBuscaFilme2.txt'),
         writeln(FilmesSTR),
-        write('Id: '),
-        read(Id),
+        getInt('Id: ', Id),
         (isDigit(Id),Id >=1,Id =< Tamanho ->
             lista(User,Lista),
             nth0(2,Lista,Resultado1),
@@ -147,8 +141,7 @@ menuPerfilRecomendacao2(User,UserChoice):-
 
 menuSelecaoListaBusca(User):-
     listas(User,Lists),
-    writeln('Id: '),
-    read(UserChoice),
+    getInt('Id: ', UserChoice),
     length(Lists,Length),
     (Length < 1->
         ln,
@@ -171,19 +164,18 @@ menuSelecaoListaBusca2(User, Lista) :-
     writeNvezes(41,'='),
     writeln('(S)ELECIONAR Filme'),
     writeln('(V)OLTAR'),
-    writeln('Selecione uma opção: ')
-    read(UserChoice),
+    getString('Selecione uma opção: ', UserChoice),
     menuSelecaoListaBuscaOption(User, Lista, UserChoice).
 
-menuSelecaoListaBuscaOption(User, Lista, 'S'):- menuSelecionaFilme(User, Lista), !.
-menuSelecaoListaBuscaOption(User, Lista, 's'):- menuSelecionaFilme(User, Lista), !.
-menuSelecaoListaBuscaOption(User, Lista, 'V'):- menuPrincipal,!.
-menuSelecaoListaBuscaOption(User, Lista, 'v'):- menuPrincipal,!.
+menuSelecaoListaBuscaOption(User, Lista, X):- atom_string('S', X), menuSelecionaFilme(User, Lista), !.
+menuSelecaoListaBuscaOption(User, Lista, X):- atom_string('s', X), menuSelecionaFilme(User, Lista), !.
+menuSelecaoListaBuscaOption(User, Lista, X):- atom_string('V', X), menuPrincipal,!.
+menuSelecaoListaBuscaOption(User, Lista, X):- atom_string('v', X), menuPrincipal,!.
 menuSelecaoListaBuscaOption(User, Lista, _ ):- writeln('Opção Inválida!'), menuSelecaoListaBusca2(User, Lista),!.
 
 menuBuscaFilme1():-
     lerArquivo('MenuBuscaFilme.txt'),
-    read(UserChoice),
+    getString(' ', UserChoice),
     menuBuscaFilme2 (UserChoice).
 
 menuBuscaFilme2(UserChoice):-
@@ -196,8 +188,7 @@ menuBuscaFilme2(UserChoice):-
     showMovies(Movies,1,FilmesSTR),
         lerArquivo('MenuBuscaFilme2.txt'),
         writeln(FilmesSTR),
-        write('Id: '),
-        read(Id),
+        getInt('Id: ', Id),
         (isDigit(Id),Id >=1,Id =< Tamanho ->
             Escolha is UserChoice -1,
             nth0(Escolha,Movies,MovieEscolhido),
@@ -215,16 +206,15 @@ menuFilme(Movie):-
     writeln('(C)OMENTAR e avaliar filme'),
     writeln('(A)LTERAR comentário'),
     writeln('(V)OLTAR ao menu principal'),
-    writeln('Selecione uma opção: '),
-    read(UserChoice),
+    getString('Selecione uma opção: ', UserChoice),
     optionsMenuFilme(Movie, UserChoice).
 
-optionsMenuFilme(Movie, 'C'):- menuComentario(Movie), !.
-optionsMenuFilme(Movie, 'c'):- menuComentario(Movie), !.
-optionsMenuFilme(Movie, 'A'):- menuComentarioChange(Movie), !.
-optionsMenuFilme(Movie, 'a'):- menuComentarioChange(Movie), !.
-optionsMenuFilme(Movie, 'V'):- menuPrincipal,!.
-optionsMenuFilme(Movie, 'v'):- menuPrincipal,!.
+optionsMenuFilme(Movie, X):- atom_string('C', X), menuComentario(Movie), !.
+optionsMenuFilme(Movie, X):- atom_string('c', X), menuComentario(Movie), !.
+optionsMenuFilme(Movie, X):- atom_string('A', X), menuComentarioChange(Movie), !.
+optionsMenuFilme(Movie, X):- atom_string('a', X), menuComentarioChange(Movie), !.
+optionsMenuFilme(Movie, X):- atom_string('V', X), menuPrincipal,!.
+optionsMenuFilme(Movie, X):- atom_string('v', X), menuPrincipal,!.
 
 menuComentario(Movie):-
     userLogged(User),
