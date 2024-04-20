@@ -111,7 +111,7 @@ menuBuscaPerfil2Options('R',User):- menuPerfilRecomendacao(User),!.
 menuBuscaPerfil2Options('r',User):- menuPerfilRecomendacao(User),!.
 menuBuscaPerfil2Options('V',User):- menuPrincipal,!.
 menuBuscaPerfil2Options('v',User):- menuPrincipal,!.
-menuBuscaPerfil2Options(_,User):- write('Opção Inválida!'),menuBuscaPerfil,!.
+menuBuscaPerfil2Options(_,User):- writeln('Opção Inválida!'),menuBuscaPerfil,!.
 
 menuPerfilRecomendacao(User):-
     lerArquivo('MenuBuscaFilme.txt'),
@@ -161,7 +161,81 @@ menuSelecaoListaBusca(User):-
             menuSelecaoListaBusca2(User,Resultado)
 
         ;
-            write('ERROR: ID inválido'),
+            writeln('ERROR: ID inválido'),
             menuBuscaPerfil
         )
+    ).
+
+menuSelecaoListaBusca2(User, Lista) :-
+    lerArquivo('logo.txt'),
+    writeNvezes(41,'='),
+    writeln('(S)ELECIONAR Filme'),
+    writeln('(V)OLTAR'),
+    writeln('Selecione uma opção: ')
+    read(UserChoice),
+    menuSelecaoListaBuscaOption(User, Lista, UserChoice).
+
+menuSelecaoListaBuscaOption(User, Lista, 'S'):- menuSelecionaFilme(User, Lista), !.
+menuSelecaoListaBuscaOption(User, Lista, 's'):- menuSelecionaFilme(User, Lista), !.
+menuSelecaoListaBuscaOption(User, Lista, 'V'):- menuPrincipal,!.
+menuSelecaoListaBuscaOption(User, Lista, 'v'):- menuPrincipal,!.
+menuSelecaoListaBuscaOption(User, Lista, _ ):- writeln('Opção Inválida!'), menuSelecaoListaBusca2(User, Lista),!.
+
+menuBuscaFilme1():-
+    lerArquivo('MenuBuscaFilme.txt'),
+    read(UserChoice),
+    menuBuscaFilme2 (UserChoice).
+
+menuBuscaFilme2(UserChoice):-
+    searchMovieByTittle(UserChoice,Movies),
+    length(Movies,Tamanho),
+    (Tamanho < 1 ->
+        write('Nenhum retorno válido'),
+        menuBuscaFilme1()
+    ;
+    showMovies(Movies,1,FilmesSTR),
+        lerArquivo('MenuBuscaFilme2.txt'),
+        writeln(FilmesSTR),
+        write('Id: '),
+        read(Id),
+        (isDigit(Id),Id >=1,Id =< Tamanho ->
+            Escolha is UserChoice -1,
+            nth0(Escolha,Movies,MovieEscolhido),
+            menuFilme(MovieEscolhido)
+        ;
+            nl,
+            writeln('Index inválido'),
+            menuBuscaFilme2(UserChoice)
+        )
+    ).
+
+
+menuFilme(Movie):-
+    printMovieInfo(Movie),
+    writeln('(C)OMENTAR e avaliar filme'),
+    writeln('(A)LTERAR comentário'),
+    writeln('(V)OLTAR ao menu principal'),
+    writeln('Selecione uma opção: '),
+    read(UserChoice),
+    optionsMenuFilme(Movie, UserChoice).
+
+optionsMenuFilme(Movie, 'C'):- menuComentario(Movie), !.
+optionsMenuFilme(Movie, 'c'):- menuComentario(Movie), !.
+optionsMenuFilme(Movie, 'A'):- menuComentarioChange(Movie), !.
+optionsMenuFilme(Movie, 'a'):- menuComentarioChange(Movie), !.
+optionsMenuFilme(Movie, 'V'):- menuPrincipal,!.
+optionsMenuFilme(Movie, 'v'):- menuPrincipal,!.
+
+menuComentario(Movie):-
+    userLogged(User),
+    (verificaCommentUnico(User, Movie) -> comentaFilme(User, Movie);
+        whiteln('Você já avaliou este filme!'),
+        menuFilme(Movie)
+    ).
+
+menuComentarioChange(Movie):-
+    userLogged(User),
+    (not(verificaCommentUnico(User, Movie)) -> comentaFilme(User, Movie);
+        whiteln('Você ainda não avaliou este filme!'),
+        menuFilme(Movie)
     ).
