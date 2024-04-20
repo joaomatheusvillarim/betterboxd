@@ -1,37 +1,32 @@
-getUsernameCadastro(R):-
+getInfo(Mensagem, Resposta):- 
     nl,
-    write('Digite o seu username: '),
-    read(R).
+    write(Mensagem),
+    read_line_to_codes(user_input, Codes),
+    string_codes(Resposta, Codes).
+
+getUsernameCadastro(R):-
+    getInfo('Digite o seu username: ', R).
 
 getnameCadastro(R):-
-    write('Digite o seu nome: '),
-    read(R).
+    getInfo('Digite o seu nome: ', R).
 
 getBioCadastro(R):-
-    write('Digite a sua bio: '),
-    read(R).
+    getInfo('Digite a sua bio: ', R).
 
 getPasswordCadastro(R):-
-    write('Digite a sua senha: '),
-    read(R).
+    getInfo('Digite a sua senha: ', R).
 
 getUsernameLogin(R):-
-    nl,
-    write('Digite o seu username: '),
-    read(R).
+    getInfo('Digite o seu username: ', R).
 
 getPasswordLogin(R):-
-    nl,
-    write('Digite a sua senha: '),
-    read(R).
+    getInfo('Digite a sua senha: ', R).
 
 getNumberStars(R):-
-    write('De 0 a 5 estrelas, como você avalia o filme? '),
-    read(R).
+    getInfo('De 0 a 5 estrelas, como você avalia o filme? ', R).
 
 getComentario(R):-
-    write('Insira seu comentário: '),
-    read(R).
+    getInfo('Insira seu comentário: ', R).
 
 writeNvezes(0,_).
 writeNvezes(N,R):-
