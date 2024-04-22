@@ -176,7 +176,7 @@ menuSelecaoListaBuscaOption(User, Lista, _ ):- writeln('Opção Inválida!'), me
 menuBuscaFilme1():-
     lerArquivo('MenuBuscaFilme.txt'),
     getString(' ', UserChoice),
-    menuBuscaFilme2 (UserChoice).
+    menuBuscaFilme2(UserChoice).
 
 menuBuscaFilme2(UserChoice):-
     searchMovieByTittle(UserChoice,Movies),
