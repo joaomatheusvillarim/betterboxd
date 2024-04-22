@@ -316,3 +316,19 @@ menuBuscaFilmeLista(User, Lista):-
     getString(' ', UserChoice),
     menuBuscaFilme2Lista(User, Lista, UserChoice).
 
+menuBuscaFilme2Lista(User, Lista, UserChoice):-
+    searchMovieByTittle(UserChoice,Movies),
+    length(Movies, Tamanho),
+
+    (Tamanho < 1 -> writeln('Nenhum retorno válido, voltando ao Menu Principal'), menuPrincipal() ;
+        showMovies(Movies, R),
+        lerArquivo('MenuBuscaFilme2.txt'),
+        writeln(R),
+        getInt('Id: ', Id),
+        (Id < 1 ; Id > Tamanho -> writeln('ERROR: Index invalido'), menuBuscaFilme2Lista(User, Lista, UserChoice);
+            getIndex(Movies, Id, Resposta),
+            appendMoviesToLista(User, Lista, Resposta),
+            menuSelecaoLista2(User, Lista)
+        )
+    ).
+
