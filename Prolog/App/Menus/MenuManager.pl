@@ -213,8 +213,9 @@ optionsMenuFilme(Movie, X):- atom_string('C', X), menuComentario(Movie), !.
 optionsMenuFilme(Movie, X):- atom_string('c', X), menuComentario(Movie), !.
 optionsMenuFilme(Movie, X):- atom_string('A', X), menuComentarioChange(Movie), !.
 optionsMenuFilme(Movie, X):- atom_string('a', X), menuComentarioChange(Movie), !.
-optionsMenuFilme(Movie, X):- atom_string('V', X), menuPrincipal,!.
-optionsMenuFilme(Movie, X):- atom_string('v', X), menuPrincipal,!.
+optionsMenuFilme(Movie, X):- atom_string('V', X), menuPrincipal(),!.
+optionsMenuFilme(Movie, X):- atom_string('v', X), menuPrincipal(),!.
+optionsMenuFilme(Movie, _ ):- writeln('Opção Inválida!'), menuFilme(Movie),!.
 
 menuComentario(Movie):-
     userLogged(User),
@@ -229,3 +230,89 @@ menuComentarioChange(Movie):-
         whiteln('Você ainda não avaliou este filme!'),
         menuFilme(Movie)
     ).
+
+comentaFilme(User, Movie):-
+    getNumberStars(S),
+    getComentario(C),
+    putComment(User, Movie, S, C).
+
+menuPerfil(User):-
+    lerArquivo('logo.txt'),
+    exibePerfil(User, R),
+    writeln(R),
+    ln,
+    writeln('(A)DICIONAR Lista'),
+    writeln('(S)ELECIONAR Lista'),
+    writeln('(E)DITAR Dados'),
+    writeln('(ES)TATISTICAS do Usuário'),
+    writeln('(V)OLTAR'),
+    getString('Selecione uma opção: ', UserChoice),
+    optionsMenuPerfil(User, Userchoice).
+
+optionsMenuPerfil(User, X):- atom_string('A', X), menuCriacaoLista(User), !.
+optionsMenuPerfil(User, X):- atom_string('a', X), menuCriacaoLista(User), !.
+optionsMenuPerfil(User, X):- atom_string('S', X), menuSelecaoLista(User), !.
+optionsMenuPerfil(User, X):- atom_string('s', X), menuSelecaoLista(User), !.
+optionsMenuPerfil(User, X):- atom_string('E', X), menuEdicaoUsuario(User), !.
+optionsMenuPerfil(User, X):- atom_string('e', X), menuEdicaoUsuario(User), !.
+optionsMenuPerfil(User, X):- atom_string('ES', X), menuEstatisticasUsuario(User), !.
+optionsMenuPerfil(User, X):- atom_string('Es', X), menuEstatisticasUsuario(User), !.
+optionsMenuPerfil(User, X):- atom_string('eS', X), menuEstatisticasUsuario(User), !.
+optionsMenuPerfil(User, X):- atom_string('es', X), menuEstatisticasUsuario(User), !.
+optionsMenuPerfil(User, X):- atom_string('V', X), menuPrincipal(), !.
+optionsMenuPerfil(User, X):- atom_string('v', X), menuPrincipal(), !.
+optionsMenuPerfil(User, _):- writeln('Opção inválida!'), menuPerfil(User), !.
+
+menuEstatisticas(User):-
+    lerArquivo('logo.txt'),
+    exibeEstatisticas(User, R),
+    writeln(R),
+    ln,
+    getString('Digite qualquer coisa para voltar: ', _ ),
+    menuPerfil(User).
+
+menuCriacaoLista(User):-
+    lerArquivo('CriacaoLista.txt'),
+    getString(' ', Nome),
+    criaLista(User, Nome),
+    menuPerfil(User).
+
+menuSelecaoLista(User):-
+    getListas(User, Listas),
+    getInt('Id: ', Id),
+    length(Listas, Tamanho),
+
+    (Tamanho < 1 -> writeln('Você não possui nenhuma Lista.'), menuPerfil(User);
+        (Id > Tamanho ; Id < 1 -> writeln('ERROR: Id invalido'), menuPerfil(User);
+            getIndex(Listas, Id, R),
+            menuSelecaoLista2(User, R)
+            )
+        ).
+
+menuSelecaoLista2(User, Lista):-
+    lerArquivo('logo.txt'),
+    exibeLista(Lista, E),
+    writeln(E),
+    writeNvezes(41,'='),
+    writeln('(A)DICIONAR Filme'),
+    writeln('(S)ELECIONAR Filme'),
+    writeln('(R)EMOVER Filme'),
+    writeln('(V)OLTAR'),
+    getString('Selecione uma opção: ', UserChoice),
+    menuSelecaoLista2Options(User, Lista, UserChoice).
+
+menuSelecaoLista2Options(User, Lista, X):- atom_string('A', X), menuBuscaFilmeLista(User, Lista), !.
+menuSelecaoLista2Options(User, Lista, X):- atom_string('a', X), menuBuscaFilmeLista(User, Lista), !.
+menuSelecaoLista2Options(User, Lista, X):- atom_string('S', X), menuSelecionaFilme(User, Lista), !.
+menuSelecaoLista2Options(User, Lista, X):- atom_string('s', X), menuSelecionaFilme(User, Lista), !.
+menuSelecaoLista2Options(User, Lista, X):- atom_string('R', X), menuRemoveFilmeLista(User, Lista), !.
+menuSelecaoLista2Options(User, Lista, X):- atom_string('r', X), menuRemoveFilmeLista(User, Lista), !.
+menuSelecaoLista2Options(User, Lista, X):- atom_string('V', X), menuPrincipal(), !.
+menuSelecaoLista2Options(User, Lista, X):- atom_string('v', X), menuPrincipal(), !.
+menuSelecaoLista2Options(User, Lista, _):- writeln('Opção inválida!'), menuSelecaoLista2(User, Lista), !.
+
+menuBuscaFilmeLista(User, Lista):- 
+    lerArquivo('MenuBuscaFilme.txt'),
+    getString(' ', UserChoice),
+    menuBuscaFilme2Lista(User, Lista, UserChoice).
+
