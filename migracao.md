@@ -1,7 +1,7 @@
 # Migração Projeto Funcional para Projeto Lógico
 
 ### Betterboxd - 0/8
-- [] cadastraUsuario
+- [ ] cadastraUsuario
 - [] isLoginValid
 - [] doLogin
 - [] commentMovie
