@@ -51,21 +51,21 @@
 - [ ] mostFrequentActor
 - [ ] mostFrequentDirector
 - [ ] recomendaMovies
-### UserController - 0/15
-- [ ] stringToUser
-- [ ] matrizToUser
-- [ ] userToRow
-- [ ] userToString
-- [ ] getUsers
-- [ ] editUser
-- [ ] appendUser
+### UserController - 11/15
+- [X] stringToUser
+- [X] matrizToUser
+- [X] userToRow
+- [X] userToString
+- [X] getUsers
+- [X] editUser
+- [X] appendUser
 - [ ] hasUsername
-- [ ] getUserBy
+- [X] getUserBy
 - [ ] getUserLogged
-- [ ] getNextIdt
+- [X] getNextIdt
 - [ ] appendListaToUser
-- [ ] exibeUsuarios
-- [ ] exibePerfil
+- [X] exibeUsuarios
+- [X] exibePerfil
 - [ ] exibeEstatisticas
 
 ## DATA
