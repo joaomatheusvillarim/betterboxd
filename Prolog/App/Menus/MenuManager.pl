@@ -445,3 +445,65 @@ editUsername(User):-
     getUserBy(Idt,UserBy),
     menuPerfil(UserBy).
 
+menuRecomendacao(User):-
+    lerArquivo('Recomendacao.txt'),
+    getString('Selecione uma opção: ',UserChoice),
+    menuRecomendacaoOptions(User, UserChoice).
+
+menuRecomendacaoOptions(User, X):-  atom_string('M', X), menuRecomendacaoTop10(User),!.
+menuRecomendacaoOptions(User, X):-  atom_string('m', X), menuRecomendacaoTop10(User),!.
+menuRecomendacaoOptions(User, X):-  atom_string('R', X), menuRecomendacoesPersonalizadas(User),!.
+menuRecomendacaoOptions(User, X):-  atom_string('r', X), menuRecomendacoesPersonalizadas(User),!.
+menuRecomendacaoOptions(User, X):-  atom_string('V', X), menuPrincipal(),!.
+menuRecomendacaoOptions(User, X):-  atom_string('v', X), menuPrincipal(),!.
+
+menuRecomendacaoTop10(User):-
+    lerArquivo('CatalogoFilmes.txt'),
+    getInt('Selecione uma opção: ', UserChoice),
+    menuRecomendacaoTop10Options(User, UserChoice).
+
+menuRecomendacaoTop10Options(User, UserChoice):-
+    (UserChoice < 1 ; UserChoice > 22 -> writeln('Error, id invalido'), sleep(1.5), menuRecomendacaoTop10(User);
+        generos = ["Comedy", "Drama", "Romance", "Sci-Fi", "Horror", "Documentary", "Biography", "History" , "Adventure", "Action", "Fantasy", "Crime", "Kids & Family", "Animation", "LGBTQ+", "Musical", "War", "Mystery & Thriller", "Music", "Holiday", "Western", "Sports"],
+        nth1(generos, Userchoice, GeneroEscolhido),
+        getBestMoviesByGenre(GeneroEscolhido, 10, Top10),
+        menuRecomendacaoTop10Exibicao(User, Top10)).
+
+menuRecomendacaoTop10Exibicao(User, Top10):-
+    lerArquivo('logo.txt'),
+    writeNvezes(41,'='),
+    showMovies(Top10, 1, Resposta),
+    whiteln(Resposta),
+    getInt('Selecione um filme: ', UserChoice),
+    length(Top10, Tamanho),
+    (UserChoice < 1 ; UserChoice > Tamanho -> writeln('Error, id invalido'), sleep(1.5), menuRecomendacaoTop10(User);
+        nth1(Top10, UserChoice, FilmeEscolhido),
+        movieInfo(FilmeEscolhido, Informacao),
+        writeln(Informacao),
+        menuFilme(FilmeEscolhido)).
+
+menuRecomendacoesPersonalizadas(User):-
+    lerArquivo('RecomendacoesPersonalizadas.txt'),
+    writeNvezes(41,'='),
+    getFavoritos(User, Favoritos),
+    length(Favoritos, TamanhoFavoritos),
+    (TamanhoFavoritos < 1 -> writeln('ERROR: Você não possui nenhum favorito!'), sleep(1.5), menuRecomendacao(User) ;
+        getAssistidos(User, Assistidos),
+        recomendaMovies(Favoritos, Assistidos, Recomendados),
+        length(Recomendados, TamanhoRecomendados),
+        (TamanhoRecomendados < 1 -> writeln('Nenhum filme encontrado, retornando ao Menu Principal.'), sleep(1.5), menuPrincipal();
+            showMovies(Recomendados, Exibir),
+            writeln(Exibir),
+            getInt('Id: ', Id),
+            (Id < 1 ; Id > TamanhoRecomendados -> writeln('Error, id invalido'), sleep(1.5), menuRecomendacao(User);
+                nth1(Recomendados, Id, Resposta),
+                movieInfo(Resposta, Info),
+                whiteln(Info),
+                menuFilme(Resposta))
+        )
+    ).
+
+
+
+
+
