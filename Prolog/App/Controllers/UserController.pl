@@ -1,7 +1,8 @@
 :- use_module(library(csv)).
 :- encoding(utf8).
+:- set_prolog_flag(encoding, utf8).
 
-getUsers(Usuarios):- csv_read_file('App/Data/Users.csv', [_|Usuarios]).
+getUsers(Usuarios):- csv_read_file('App/Data/Users.csv', Usuarios).
 
 getUser(Id, Usuario):- getUsers(Usuarios), nth1(Id, Usuarios, Usuario).
 
