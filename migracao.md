@@ -27,25 +27,25 @@
 - [ ] exibeLista
 - [ ] removeMovieFromLista
 - [ ] editLista
-### MovieController - 0/23
-- [ ] stringToMovie
-- [ ] matrizToMovie
+### MovieController - 12/23
+- [X] stringToMovie
+- [X] matrizToMovie
 - [ ] stringToList
-- [ ] getMovies
-- [ ] getMovieById
-- [ ] getMoviesById
-- [ ] getMoviesByGenre
+- [X] getMovies
+- [X] getMovieById
+- [X] getMoviesById
+- [X] getMoviesByGenre
 - [ ] getBestMoviesByGenre
-- [ ] getMoviesByTitle
+- [X] getMoviesByTitle
 - [ ] appendComment
 - [ ] updateComment
 - [ ] editComment
 - [ ] commentToString
-- [ ] moviesToIdString
-- [ ] movieAtIndex
-- [ ] showMovies
-- [ ] searchMovieByID
-- [ ] searchMovieByTitle
+- [X] moviesToIdString
+- [X] movieAtIndex
+- [X] showMovies
+- [X] searchMovieByID
+- [X] searchMovieByTitle
 - [ ] mostFrequentGenre
 - [ ] secondMostFrequentGenre
 - [ ] mostFrequentActor
@@ -68,7 +68,7 @@
 - [X] exibePerfil
 - [ ] exibeEstatisticas
 
-## DATA
+## DATA - Provavel desnecessário, tendo em vista a existencia de uma biblioteca com todas funcoes em prolog.
 ### CsvManager - 0/10
 - [ ] matrizToString
 - [ ] writeCSV
@@ -89,11 +89,11 @@ Tudo ok!
 - [ ] data Lista (Constructor)
 - [ ] createLista
 ### Movie - 0/2
-- [ ] data Movie (Constructor)
-- [ ] createMovie
+- [x] data Movie (Constructor)
+- [x] createMovie
 ### User - 0/2
-- [ ] data User (Constructor)
-- [ ] createUser
+- [x] data User (Constructor)
+- [x] createUser
 
 ## UTIL
 ### GetInfos
