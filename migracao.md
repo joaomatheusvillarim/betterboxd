@@ -11,22 +11,22 @@
 - [ ] criaLista
 
 ## CONTROLLER
-### ListaController - 0/14
-- [ ] stringToLista
-- [ ] listaToString
-- [ ] matrizToLista
-- [ ] getListas
-- [ ] createListaData
-- [ ] appendMovieToLista
-- [ ] getListaById
-- [ ] getListasById
-- [ ] listasToIdL
-- [ ] getLastId
-- [ ] getLastLista
-- [ ] exibeListas
-- [ ] exibeLista
-- [ ] removeMovieFromLista
-- [ ] editLista
+### ListaController - 14/14
+- [x] stringToLista
+- [x] listaToString
+- [x] matrizToLista
+- [x] getListas
+- [x] createListaData
+- [x] appendMovieToLista
+- [x] getListaById
+- [x] getListasById
+- [x] listasToIdL
+- [x] getLastId
+- [x] getLastLista
+- [x] exibeListas
+- [x] exibeLista
+- [x] removeMovieFromLista
+- [x] editLista
 ### MovieController - 12/23
 - [X] stringToMovie
 - [X] matrizToMovie
@@ -69,25 +69,25 @@
 - [ ] exibeEstatisticas
 
 ## DATA - Provavel desnecessário, tendo em vista a existencia de uma biblioteca com todas funcoes em prolog.
-### CsvManager - 0/10
-- [ ] matrizToString
-- [ ] writeCSV
-- [ ] readCSV
-- [ ] readUTF8
-- [ ] appendCSV
-- [ ] getRow
-- [ ] editMatriz
-- [ ] editarIndice
-- [ ] editarLinhaCSV
-- [ ] appendLinhaCSV
+### CsvManager - 10/10
+- [x] matrizToString
+- [x] writeCSV
+- [x] readCSV
+- [x] readUTF8
+- [x] appendCSV
+- [x] getRow
+- [x] editMatriz
+- [x] editarIndice
+- [x] editarLinhaCSV
+- [x] appendLinhaCSV
 
 ## MENUS
 Tudo ok!
 
 ## MODELS
-### Lista - 0/2
-- [ ] data Lista (Constructor)
-- [ ] createLista
+### Lista - 2/2
+- [x] data Lista (Constructor)
+- [x] createLista
 ### Movie - 0/2
 - [x] data Movie (Constructor)
 - [x] createMovie
