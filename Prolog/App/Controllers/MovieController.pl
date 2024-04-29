@@ -14,7 +14,7 @@ editMovie(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios):-
 
 editMovieAux([], _, _, _, _, _, _, _, _, []).
 editMovieAux([row(ID, _, _, _, _, _, _, _)|T], ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, [row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T]).
-editMovieAux([H|T], ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, [H|Out]):- editUserAux(T, ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, Out).
+editMovieAux([H|T], ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, [H|Out]):- editMovieAux(T, ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, Out).
 
 editComentarios(Id, Edicao):-
     getMovie(Id, row(Id, Titulo, Rating, Generos, Ano, Atores, Diretores, _)),
@@ -38,6 +38,12 @@ getMovieByGenreAux([], _, []).
 getMovieByGenreAux([row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T], GeneroBuscado, Resposta):-
     (isSubstring(GeneroBuscado, Generos) -> getMovieByGenreAux(T, GeneroBuscado, Resposta2), Resposta = [row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|Resposta2]
         ;getMovieByGenreAux(T, GeneroBuscado, Resposta)).
+
+getMoviesByIds([], []).
+getMoviesByIds([H|T], R):-  
+    getMoviesByIds(T, R2),
+    getMovie(H, Movie), 
+    append([Movie], R2, R).
 
 showMovies(Movies, Num, Resposta) :-
     showMoviesAux(Movies, Num, Lista),

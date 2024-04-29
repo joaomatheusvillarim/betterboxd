@@ -8,7 +8,8 @@ getUser(Id, Usuario):- getUsers(Usuarios), nth1(Id, Usuarios, Usuario).
 
 appendUser(Username, Name, Bio, Senha, IdsLista):-
     getUsers(Usuarios),
-    length(Usuarios, Id),
+    length(Usuarios, Id2),
+    Id is Id2 + 1,
     append(Usuarios, [row(Id, Username, Name, Bio, Senha, IdsLista)], Saida),
     csv_write_file('App/Data/Users.csv', Saida).
 
