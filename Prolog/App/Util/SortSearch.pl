@@ -1,8 +1,8 @@
 merge([],[],_).
 merge(L,[],L).
 merge([],R,R).
-merge([H:T],[H2:T2],[H:T3]):- H>=H2,merge(T,[H2:T2],T3),!.
-merge([H:T],[H2:T2],[H2:T3]):- merge([H:T],T2,T3),!.
+merge([row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios):T],[row(ID2, Titulo2, Rating2, Generos2, Ano2, Atores2, Diretores2, Comentarios2):T2],[row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios):T3]): Rating>=Rating2,merge(T,[row(ID2, Titulo2, Rating2, Generos2, Ano2, Atores2, Diretores2, Comentarios2):T2],T3),!.
+merge([row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios):T],[row(ID2, Titulo2, Rating2, Generos2, Ano2, Atores2, Diretores2, Comentarios2):T2],[row(ID2, Titulo2, Rating2, Generos2, Ano2, Atores2, Diretores2, Comentarios2):T3]):- merge([row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios):T],T2,T3),!.
 
 split(Lista, Esquerda, Direita) :-
     length(Lista, Tamanho),
