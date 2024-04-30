@@ -55,11 +55,8 @@ exibeUsuariosAux([row(Id, _, Nome, _, _, _)|T], Resposta):- exibeUsuariosAux(T, 
 
 exibePerfil(row(_, Username, Name, Bio, _, IdsLista), Resposta):-
     splitNumbers(IdsLista, Ids),
-    writeln(Ids),
     getListasById(Ids, Listas),
-    writeln(Listas),
     exibeListas(Listas, 1, Resultado),
-    writeln(Resultado),
     Lista = ['=========================================\n',
              '            Perfil de Usuário          \n',
              '=========================================\n',
