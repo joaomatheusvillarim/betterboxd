@@ -1,4 +1,4 @@
-erge([],[],_).
+merge([],[],_).
 merge(L,[],L).
 merge([],R,R).
 merge([row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T],[row(ID2, Titulo2, Rating2, Generos2, Ano2, Atores2, Diretores2, Comentarios2)|T2],[row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T3]): Rating>=Rating2,merge(T,[row(ID2, Titulo2, Rating2, Generos2, Ano2, Atores2, Diretores2, Comentarios2)|T2],T3),!.
@@ -17,3 +17,12 @@ merge_sort(Lista, Ordenada) :-
     merge_sort(Esquerda, EsquerdaOrdenada),
     merge_sort(Direita, DireitaOrdenada),
     merge(EsquerdaOrdenada, DireitaOrdenada, Ordenada).
+
+listaCaracteristica(_,[],[]).
+listaCaracteristica(Caracteristica,[row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T],[Caracteristica|T2]):-
+    listaCaracteristica(Caracteristica,T,T2).
+
+most_common_element(List, Result) :-
+    select(Result, List, Rest),
+    select(Result, Rest, RestWithoutResult),
+    \+ member(Result, RestWithoutResult).
