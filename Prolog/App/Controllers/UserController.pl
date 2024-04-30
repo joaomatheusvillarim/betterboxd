@@ -1,6 +1,8 @@
 :- use_module(library(csv)).
 :- encoding(utf8).
 :- set_prolog_flag(encoding, utf8).
+:- consult('App/Controllers/ListaController.pl').
+:- consult('App/Util/StringsOP.pl').
 
 getUsers(Usuarios):- csv_read_file('App/Data/Users.csv', Usuarios).
 
@@ -52,15 +54,21 @@ exibeUsuariosAux([row(Id, _, Nome, _, _, _)], Resposta):- append([Id, '. ', Nome
 exibeUsuariosAux([row(Id, _, Nome, _, _, _)|T], Resposta):- exibeUsuariosAux(T, Resposta2), append([Id, '. ', Nome, '\n'], Resposta2, Resposta).
 
 exibePerfil(row(_, Username, Name, Bio, _, IdsLista), Resposta):-
-    %exibeListas(IdsLista, Resultado),
+    splitNumbers(IdsLista, Ids),
+    writeln(Ids),
+    getListasById(Ids, Listas),
+    writeln(Listas),
+    exibeListas(Listas, 1, Resultado),
+    writeln(Resultado),
     Lista = ['=========================================\n',
              '            Perfil de Usuário          \n',
              '=========================================\n',
              'Nome:     ', Name, '\n',
              'Username: ', Username, '\n',
              'Bio:      ', Bio, '\n',
-             '-----------------------------------------\n'
-             %'%Resultado, '\n', '-----------------------------------------'
+             '-----------------------------------------\n',
+             Resultado, '\n', 
+             '-----------------------------------------'
             ],
     atomic_list_concat(Lista, '', Resposta).
 
