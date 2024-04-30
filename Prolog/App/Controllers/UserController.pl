@@ -27,6 +27,10 @@ hasUsername(Username):-
 hasUsernameAux(Username, [row(_, Username, _, _, _, _)|_]):- !.
 hasUsernameAux(Username, [row(_, _, _, _, _, _)|T]):- hasUsernameAux(Username, T).
 
+getUserLogged(User):-
+    csv_read_file('App/Data/Temp.csv', [row(ID)]),
+    getUser(ID, User).
+
 editUserAux([], _, _, _, _, _, _, []).
 editUserAux([row(Id, _, _, _, _, _)|T], Id, Username, Name, Bio, Senha, IdsLista, [row(Id, Username, Name, Bio, Senha, IdsLista)|T]).
 editUserAux([H|T], Id, Username, Name, Bio, Senha, IdsLista, [H|Out]):- editUserAux(T, Id, Username, Name, Bio, Senha, IdsLista, Out).
