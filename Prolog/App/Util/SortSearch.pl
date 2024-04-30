@@ -1,3 +1,4 @@
+:- consult('StringsOP.pl').
 merge([],[],_).
 merge(L,[],L).
 merge([],R,R).
@@ -18,12 +19,23 @@ merge_sort(Lista, Ordenada) :-
     merge_sort(Direita, DireitaOrdenada),
     merge(EsquerdaOrdenada, DireitaOrdenada, Ordenada).
 
-listaGenero([], []).
-listaGenero([row(_, _, _, [G|Gs], _, _, _, _)|T], G),!.
+listaGeneros([],[]).
+listaGeneros([row(_,_,_,Genero,_,_,_,_)|T],[Genero|T2]):-
+    listaGeneros(T,T2),!.
 
-    
+listaDiretor([],[]).
+listaDiretor([row(_,_,_,_,_,_,Diretor,_)|T],[Diretor|T2]):-
+    listaDiretor(T,T2),!.
+
+listaAtor([],[]).
+listaAtor([row(_,_,_,_,_,Ator,_,_)|T],[Ator|T2]):-
+    listaAtor(T,T2),!.
+
+extrair(ListaStrings, ListaExtraida) :-
+    maplist(stringToList2, ListaStrings, ListasExtraidas),
+    flatten(ListasExtraidas, ListaExtraida).
 
 most_common_element(List, Result) :-
     select(Result, List, Rest),
     select(Result, Rest, RestWithoutResult),
-    \+ member(Result, RestWithoutResult).
+    \+ member(Result, RestWithoutResult),!.
