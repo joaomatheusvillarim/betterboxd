@@ -18,9 +18,10 @@ merge_sort(Lista, Ordenada) :-
     merge_sort(Direita, DireitaOrdenada),
     merge(EsquerdaOrdenada, DireitaOrdenada, Ordenada).
 
-listaCaracteristica(_,[],[]).
-listaCaracteristica(Caracteristica,[row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T],[Caracteristica|T2]):-
-    listaCaracteristica(Caracteristica,T,T2).
+listaGenero([], []).
+listaGenero([row(_, _, _, [G|Gs], _, _, _, _)|T], G),!.
+
+    
 
 most_common_element(List, Result) :-
     select(Result, List, Rest),
