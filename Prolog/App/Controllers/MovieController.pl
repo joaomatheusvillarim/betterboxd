@@ -2,6 +2,8 @@
 :- encoding(utf8).
 :- set_prolog_flag(encoding, utf8).
 :- consult('App/Util/StringsOP.pl').
+:- consult('App/Util/SortSearch.pl').
+
 
 getMovies(Movies):- csv_read_file('App/Data/Movies.csv', Movies).
 
