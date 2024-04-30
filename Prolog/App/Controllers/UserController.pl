@@ -20,6 +20,13 @@ editUser(Id, Username, Name, Bio, Senha, IdsLista):-
     editUserAux(Usuarios, Id, Username, Name, Bio, Senha, IdsLista, Saida),
     csv_write_file('App/Data/Users.csv', Saida).
 
+hasUsername(Username):-
+    getUsers(U),
+    hasUsernameAux(Username, U).
+
+hasUsernameAux(Username, [row(_, Username, _, _, _, _)|_]):- !.
+hasUsernameAux(Username, [row(_, _, _, _, _, _)|T]):- hasUsernameAux(Username, T).
+
 editUserAux([], _, _, _, _, _, _, []).
 editUserAux([row(Id, _, _, _, _, _)|T], Id, Username, Name, Bio, Senha, IdsLista, [row(Id, Username, Name, Bio, Senha, IdsLista)|T]).
 editUserAux([H|T], Id, Username, Name, Bio, Senha, IdsLista, [H|Out]):- editUserAux(T, Id, Username, Name, Bio, Senha, IdsLista, Out).
