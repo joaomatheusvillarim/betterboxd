@@ -80,3 +80,15 @@ editComment(IdUser, IdMovie, NumStar, Comentario):-
 editCommentAux([], _, _, _, _, []).
 editCommentAux([row(IdUser, IdMovie, _, _)|T], IdUser, IdMovie, NumStar, Comentario, [row(IdUser, IdMovie, NumStar, Comentario)|T]):- !.
 editCommentAux([H|T], IdUser, IdMovie, NumStar, Comentario, [H|Out]):- editCommentAux(T, IdUser, IdMovie, NumStar, Comentario, Out).
+
+mostFrequentGender([], ''):- !.
+mostFrequentGender(Movies, R):- mostFrequent('Genero', Movies, R).
+
+secondMostFrequentGender([], ''):- !.
+secondMostFrequentGender(Movies, R):- secondMostFrequent('Genero', Movies, R).
+
+mostFrequentActor([], ''):- !.
+mostFrequentActor(Movies, R):- mostFrequent('Ator', Movies, R).
+
+mostFrequentDirector([], ''):- !.
+mostFrequentDirector(Movies, R):- mostFrequent('Diretor', Movies, R).
