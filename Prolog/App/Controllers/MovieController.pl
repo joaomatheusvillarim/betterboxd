@@ -18,11 +18,6 @@ editMovieAux([], _, _, _, _, _, _, _, _, []).
 editMovieAux([row(ID, _, _, _, _, _, _, _)|T], ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, [row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T]).
 editMovieAux([H|T], ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, [H|Out]):- editMovieAux(T, ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios, Out).
 
-editComentarios(Id, Edicao):-
-    getMovie(Id, row(Id, Titulo, Rating, Generos, Ano, Atores, Diretores, _)),
-    editMovie(Id, Titulo, Rating, Generos, Ano, Atores, Diretores, Edicao).
-
-
 getMovieByTitle(Titulo, Resposta):-
     getMovies(Movies),
     getMovieByTittleAux(Movies, Titulo, Resposta).
@@ -56,3 +51,32 @@ showMoviesAux([row(_, Titulo, _, _, Ano, _, _, _)|T], Num, [Resposta|Resto]) :-
     atomic_list_concat([Num, ', ', Titulo, ', ', Ano, '\n'], Resposta),
     Num2 is Num + 1,
     showMoviesAux(T, Num2, Resto).
+
+getAllComentarios(Comentarios):- csv_read_file('App/Data/Comentarios.csv', Comentarios).
+
+getComentariosByMovie(IdMovie, Comentarios):-
+    getAllComentarios(AllComentarios),
+    getComentariosByMovieAux(IdMovie, AllComentarios, Comentarios).
+
+getComentariosByMovieAux(_, [], []).
+getComentariosByMovieAux(IdMovie, [row(IdUser, IdMovie, NumStar, Comentario)|T], [row(IdUser, IdMovie, NumStar, Comentario)|T2]):- 
+    getComentariosByMovieAux(IdMovie, T, T2), !.
+getComentariosByMovieAux(IdMovie, [_|T], R):- getComentariosByMovieAux(IdMovie, T, R).
+
+appendComentario(IdUser, IdMovie, NumStar, Comentario):-
+    getAllComentarios(C),
+    append(C, [row(IdUser, IdMovie, NumStar, Comentario)], Saida),
+    csv_write_file('App/Data/Comentarios.csv', Saida).
+
+hasComment(IdUser, IdMovie):-
+    getComentariosByMovie(IdMovie, C),
+    member(row(IdUser, IdMovie, _, _), C).
+
+editComment(IdUser, IdMovie, NumStar, Comentario):-
+    getAllComentarios(C),
+    editCommentAux(C, IdUser, IdMovie, NumStar, Comentario, Saida),
+    csv_write_file('App/Data/Comentarios.csv', Saida).
+
+editCommentAux([], _, _, _, _, []).
+editCommentAux([row(IdUser, IdMovie, _, _)|T], IdUser, IdMovie, NumStar, Comentario, [row(IdUser, IdMovie, NumStar, Comentario)|T]):- !.
+editCommentAux([H|T], IdUser, IdMovie, NumStar, Comentario, [H|Out]):- editCommentAux(T, IdUser, IdMovie, NumStar, Comentario, Out).

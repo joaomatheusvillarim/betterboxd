@@ -32,7 +32,7 @@ getUserLogged(User):-
     getUser(ID, User).
 
 editUserAux([], _, _, _, _, _, _, []).
-editUserAux([row(Id, _, _, _, _, _)|T], Id, Username, Name, Bio, Senha, IdsLista, [row(Id, Username, Name, Bio, Senha, IdsLista)|T]).
+editUserAux([row(Id, _, _, _, _, _)|T], Id, Username, Name, Bio, Senha, IdsLista, [row(Id, Username, Name, Bio, Senha, IdsLista)|T]):- !.
 editUserAux([H|T], Id, Username, Name, Bio, Senha, IdsLista, [H|Out]):- editUserAux(T, Id, Username, Name, Bio, Senha, IdsLista, Out).
 
 editUsername(Id, Edicao):-
