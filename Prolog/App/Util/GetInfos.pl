@@ -24,31 +24,21 @@ getUsernameCadastro(R):-
     true).
 
 getnameCadastro(R):-
-    getString('Digite o seu nome: ', R),
-    atom_chars(R, R2),
-    length(R2, Tamanho),
-    (Tamanho > 18 -> 
-        writeln('Aviso: O seu nome deve ter no máximo 18 caracteres.'),
-        getnameCadastro(R)
-    ).
+    getString('Digite o seu nome: ', R). 
 
 getBioCadastro(R):-
     getString('Digite a sua bio: ', R).
 
 getPasswordCadastro(R):-
-    getString('Digite a sua senha: ', R),
-    atom_chars(R, R2),
-    length(R2, Tamanho),
-    (Tamanho < 5 ->
-        writeln('Aviso: A senha deve ter no mínimo 5 digitos.'),
-        getPasswordCadastro(R)
-    ).
+    getString('Digite a sua senha: ', R).
 
 getUsernameLogin(R):-
-    getString('Digite o seu username: ', R).
+    getString('Digite o seu username: ', Temp),
+    atom_string(R, Temp).
 
 getPasswordLogin(R):-
-    getString('Digite a sua senha: ', R).
+    getString('Digite a sua senha: ', Temp),
+    atom_string(R, Temp).
 
 getNumberStars(R):-
     getInt('De 0 a 5 estrelas, como você avalia o filme? ', R),

@@ -2,19 +2,22 @@
 :- consult('LeTxt.pl').
 :- consult('../Util/GetInfos.pl').
 :- consult('App/betterboxd.pl').
+:- consult('App/Controllers/ListaController.pl').
+:- consult('App/Controllers/UserController.pl').
+:- consult('App/Controllers/MovieController.pl').
 
 menuInicial :-
     lerArquivo('MenuInicial.txt'),
     getString('Selecione uma opção: ', X),
     optionsMenuInicial(X).
 
-optionsMenuInicial(X):- atom_string('E', X), menuLogin,!.
-optionsMenuInicial(X):- atom_string('e', X), menuLogin,!.
-optionsMenuInicial(X):- atom_string('C', X), menuCadastro,!.
-optionsMenuInicial(X):- atom_string('c', X), menuCadastro,!.
+optionsMenuInicial(X):- atom_string('E', X), menuLogin, !.
+optionsMenuInicial(X):- atom_string('e', X), menuLogin, !.
+optionsMenuInicial(X):- atom_string('C', X), menuCadastro, !.
+optionsMenuInicial(X):- atom_string('c', X), menuCadastro, !.
 optionsMenuInicial(X):- atom_string('S', X), write(''), !.
 optionsMenuInicial(X):- atom_string('s', X), write(''), !.
-optionsMenuInicial(_) :- writeln('Opção inválida!'),sleep(1.5), menuInicial.
+optionsMenuInicial(_):- writeln('Opção inválida!'),sleep(1.5), menuInicial, !.
 
 menuLogin :-
     
@@ -22,6 +25,7 @@ menuLogin :-
     getUsernameLogin(Login),
     getPasswordLogin(Senha),
     (isLoginValid(Login,Senha) ->
+        doLogin(Login),
         menuPrincipal
     ;
         nl,writeln('Login Inválido!'),sleep(1.5),menuInicial
@@ -44,15 +48,15 @@ menuPrincipal :-
     getUserLogged(User),
     optionsMenuPrincipal(X,User).
     
-optionsMenuPrincipal(X):- atom_string('V', X), menuPerfil(User),!.
-optionsMenuPrincipal(X):- atom_string('v', X), menuPerfil(User),!.
-optionsMenuPrincipal(X):- atom_string('B', X), menuBusca1,!.
-optionsMenuPrincipal(X):- atom_string('b', X), menuBusca1,!.
-optionsMenuPrincipal(X):- atom_string('R', X), menuRecomendacao(User),!.
-optionsMenuPrincipal(X):- atom_string('r', X), menuRecomendacao(User),!.
-optionsMenuPrincipal(X):- atom_string('S', X), write(''), !.
-optionsMenuPrincipal(X):- atom_string('s', X), write(''), !.
-optionsMenuPrincipal(_) :- writeln('Opção inválida!'),sleep(1.5), menuPrincipal.
+optionsMenuPrincipal(X, User):- atom_string('V', X), menuPerfil(User),!.
+optionsMenuPrincipal(X, User):- atom_string('v', X), menuPerfil(User),!.
+optionsMenuPrincipal(X, User):- atom_string('B', X), menuBusca1,!.
+optionsMenuPrincipal(X, User):- atom_string('b', X), menuBusca1,!.
+optionsMenuPrincipal(X, User):- atom_string('R', X), menuRecomendacao(User),!.
+optionsMenuPrincipal(X, User):- atom_string('r', X), menuRecomendacao(User),!.
+optionsMenuPrincipal(X, User):- atom_string('S', X), write(''), !.
+optionsMenuPrincipal(X, User):- atom_string('s', X), write(''), !.
+optionsMenuPrincipal(_, _) :- writeln('Opção inválida!'),sleep(1.5), menuPrincipal.
 
 menuBusca1:-
     lerArquivo('MenuBusca1.txt'),
@@ -240,14 +244,13 @@ menuPerfil(User):-
     lerArquivo('logo.txt'),
     exibePerfil(User, R),
     writeln(R),
-    ln,
     writeln('(A)DICIONAR Lista'),
     writeln('(S)ELECIONAR Lista'),
     writeln('(E)DITAR Dados'),
     writeln('(ES)TATISTICAS do Usuário'),
     writeln('(V)OLTAR'),
-    getString('Selecione uma opção: ', UserChoice),
-    optionsMenuPerfil(User, Userchoice).
+    getString('Selecione uma opção: ', UserChoice2),
+    optionsMenuPerfil(User, Userchoice2).
 
 optionsMenuPerfil(User, X):- atom_string('A', X), menuCriacaoLista(User), !.
 optionsMenuPerfil(User, X):- atom_string('a', X), menuCriacaoLista(User), !.
@@ -259,8 +262,8 @@ optionsMenuPerfil(User, X):- atom_string('ES', X), menuEstatisticasUsuario(User)
 optionsMenuPerfil(User, X):- atom_string('Es', X), menuEstatisticasUsuario(User), !.
 optionsMenuPerfil(User, X):- atom_string('eS', X), menuEstatisticasUsuario(User), !.
 optionsMenuPerfil(User, X):- atom_string('es', X), menuEstatisticasUsuario(User), !.
-optionsMenuPerfil(User, X):- atom_string('V', X), menuPrincipal(), !.
-optionsMenuPerfil(User, X):- atom_string('v', X), menuPrincipal(), !.
+optionsMenuPerfil(User, X):- atom_string('V', X), menuPrincipal, !.
+optionsMenuPerfil(User, X):- atom_string('v', X), menuPrincipal, !.
 optionsMenuPerfil(User, _):- writeln('Opção inválida!'),sleep(1.5), menuPerfil(User), !.
 
 menuEstatisticas(User):-
