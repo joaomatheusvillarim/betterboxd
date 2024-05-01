@@ -26,6 +26,12 @@ doLogin(Username):-
     hasUsername(Username, row(Id, Username, _, _, _, _)),
     csv_write_file('App/Data/Temp.csv', [row(Id)]).
 
+criaLista(row(Id, Username, Name, Bio, Senha, IdsLista), Nome, NovoUser):-
+    createLista(Nome, T),
+    Temp = [IdsLista, T],
+    atomic_list_concat(Temp, ',', Resposta),
+    editUser(Id, Username, Name, Bio, Senha, Resposta),
+    getUser(Id, NovoUser).
 
 
 

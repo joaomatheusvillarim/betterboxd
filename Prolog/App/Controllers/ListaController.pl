@@ -10,6 +10,10 @@ getLista(Id, Lista):-
     getListas(Listas), 
     nth1(Id, Listas, Lista).
 
+getListasByString(Str, Listas):-
+    splitNumbers(Str, Temp),
+    getListasById(Temp, Listas).
+
 getListasById([], []).
 getListasById([H|T], R):- 
     getLista(H, Lista), 

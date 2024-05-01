@@ -78,7 +78,7 @@ exibePerfil(row(_, Username, Name, Bio, _, IdsLista), Resposta):-
              'Username: ', Username, '\n',
              'Bio:      ', Bio, '\n',
              '-----------------------------------------\n',
-             Resultado, '\n', 
+             Resultado, 
              '-----------------------------------------'
             ],
     atomic_list_concat(Lista, '', Resposta).

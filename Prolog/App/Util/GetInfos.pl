@@ -37,8 +37,7 @@ getUsernameLogin(R):-
     atom_string(R, Temp).
 
 getPasswordLogin(R):-
-    getString('Digite a sua senha: ', Temp),
-    atom_string(R, Temp).
+    getString('Digite a sua senha: ', R).
 
 getNumberStars(R):-
     getInt('De 0 a 5 estrelas, como você avalia o filme? ', R),
