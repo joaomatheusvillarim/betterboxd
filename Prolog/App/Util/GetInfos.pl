@@ -1,3 +1,6 @@
+:- consult('App/Controllers/UserController.pl').
+:- consult('App/Util/StringsOP.pl').
+
 getString(Mensagem, Resposta):- 
     nl,
     write(Mensagem),
@@ -9,19 +12,21 @@ getInt(Mensagem, Resposta):-
     atom_number(String, Resposta).
 
 getUsernameCadastro(R):-
-    getString('Digite o seu username: ', R).
-    length(R,Tamanho),
+    getString('Digite o seu username: ', R),
+    atom_chars(R, R2),
+    length(R2, Tamanho),
     (hasUsername(R) -> 
         writeln('Aviso: O nome do usuário já está em uso.'),
-        getUsernameCadastro(R)
-    ;Tamanho > 18 ->
+        getUsernameCadastro(R);
+    Tamanho > 18 ->
         writeln('Aviso: O nome do usuário deve ter no máximo 18 caracteres.'),
-    getUsernameCadastro(R)
-    ).
+        getUsernameCadastro(R);
+    true).
 
 getnameCadastro(R):-
     getString('Digite o seu nome: ', R),
-    length(R,Tamanho),
+    atom_chars(R, R2),
+    length(R2, Tamanho),
     (Tamanho > 18 -> 
         writeln('Aviso: O seu nome deve ter no máximo 18 caracteres.'),
         getnameCadastro(R)
@@ -32,7 +37,8 @@ getBioCadastro(R):-
 
 getPasswordCadastro(R):-
     getString('Digite a sua senha: ', R),
-    length(R,Tamanho),
+    atom_chars(R, R2),
+    length(R2, Tamanho),
     (Tamanho < 5 ->
         writeln('Aviso: A senha deve ter no mínimo 5 digitos.'),
         getPasswordCadastro(R)

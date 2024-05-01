@@ -1,6 +1,7 @@
 :- set_prolog_flag(encoding, utf8).
 :- consult('LeTxt.pl').
 :- consult('../Util/GetInfos.pl').
+:- consult('App/betterboxd.pl').
 
 menuInicial :-
     lerArquivo('MenuInicial.txt'),
@@ -13,7 +14,7 @@ optionsMenuInicial(X):- atom_string('C', X), menuCadastro,!.
 optionsMenuInicial(X):- atom_string('c', X), menuCadastro,!.
 optionsMenuInicial(X):- atom_string('S', X), write(''), !.
 optionsMenuInicial(X):- atom_string('s', X), write(''), !.
-optionsMenuInicial(_) :- writeln('Opção inválida!'),sleep(1.5),cls, menuInicial.
+optionsMenuInicial(_) :- writeln('Opção inválida!'),sleep(1.5), menuInicial.
 
 menuLogin :-
     
@@ -27,7 +28,7 @@ menuLogin :-
     ).
 
 menuCadastro:-
-    lerArquivo('MenuCadastro.txt'),
+    lerArquivo('MenuLogin.txt'),
     getUsernameCadastro(User),
     getnameCadastro(Nome),
     getBioCadastro(Bio),

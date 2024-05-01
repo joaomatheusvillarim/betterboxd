@@ -21,11 +21,14 @@ editUser(Id, Username, Name, Bio, Senha, IdsLista):-
     csv_write_file('App/Data/Users.csv', Saida).
 
 hasUsername(Username):-
-    getUsers(U),
-    hasUsernameAux(Username, U).
+    hasUsername(Username, _).
 
-hasUsernameAux(Username, [row(_, Username, _, _, _, _)|_]):- !.
-hasUsernameAux(Username, [row(_, _, _, _, _, _)|T]):- hasUsernameAux(Username, T).
+hasUsername(Username, R):-
+    getUsers(U),
+    hasUsernameAux(Username, U, R).
+
+hasUsernameAux(Username, [row(Id, Username, Name, Bio, Senha, IdsLista)|_], row(Id, Username, Name, Bio, Senha, IdsLista)):- !.
+hasUsernameAux(Username, [row(_, _, _, _, _, _)|T], R):- hasUsernameAux(Username, T, R).
 
 getUserLogged(User):-
     csv_read_file('App/Data/Temp.csv', [row(ID)]),

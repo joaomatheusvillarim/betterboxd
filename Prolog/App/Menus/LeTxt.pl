@@ -4,16 +4,18 @@ lerArquivo(NomeArquivo) :-
     atom_concat('App/Menus/MenusTxt/', NomeArquivo, NovoCaminho),
     open(NovoCaminho, read, Stream),
     lerLinhas(Stream),
-    close(Stream).                       
+    close(Stream).
 
 lerLinhas(Stream) :-
-        not(at_end_of_stream(Stream)),
-        read_line(Stream, Line),            
-        not(atom_chars(Line, ['_'|_])),       
-        writeln(Line),                      
-        lerLinhas(Stream).                  
-        
-lerLinhas(_).  
+    repeat,
+    (   at_end_of_stream(Stream) ->
+        ! ;
+        read_line(Stream, Line),
+        not(atom_chars(Line, ['_'|_])),
+        writeln(Line),
+        fail
+    ).                 
+    
 
 read_line(Stream, Line) :-
     read_line_to_string(Stream, LineStr),

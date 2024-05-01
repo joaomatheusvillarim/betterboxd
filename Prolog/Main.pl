@@ -6,4 +6,4 @@
 :- initialization(main).
 
 main :- 
-    menuInicial.
+    menuInicial().
