@@ -68,7 +68,7 @@ exibeLista(row(_, Nome, ''), Resposta):-
     Lista = [   '=========================================\n',
                 '      ', Nome, '\n',
                 '=========================================\n',
-                'Você não possui nenhum filme!'            
+                'A Lista não possui nenhum filme!'            
             ],
     atomic_list_concat(Lista, '', Resposta).
 

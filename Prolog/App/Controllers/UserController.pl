@@ -83,5 +83,28 @@ exibePerfil(row(_, Username, Name, Bio, _, IdsLista), Resposta):-
             ],
     atomic_list_concat(Lista, '', Resposta).
 
-%Exibe estatisticas precisa de funcoes de lista.
+exibeEstatisticas(row(_, _, _, _, _, IdsLista), Str):-
+    getListasByString(IdsLista, Listas),
+    nth0(0, Listas, row(_, _, FavoritosStr)),
+    nth0(1, Listas, row(_, _, AssistidosStr)),
+    splitNumbers(FavoritosStr, Temp1),
+    getMoviesByIds(Temp1, Favoritos),
+    splitNumbers(AssistidosStr, Temp2),
+    getMoviesByIds(Temp2, Assistidos),
+    append(Favoritos, Assistidos, Total),
+    length(Total, N),
+    mostFrequentGender(Total, G),
+    mostFrequentActor(Total, A),
+    mostFrequentDirector(Total, D),
+    Lista = [
+        '=========================================\n',
+        '          Estatisticas de Usuário        \n',
+        '=========================================\n',
+        'Filmes assistidos:     ', N, '\n',
+        'Gênero favorito:       ', G, '\n',
+        'Ator(a) favorito:      ', A, '\n',
+        'Diretor(a) favorito:   ', D, '\n',
+        '========================================='
+    ],
+    atomic_list_concat(Lista, Str).
 

@@ -93,3 +93,17 @@ mostFrequentActor(Movies, R):- mostFrequent('Ator', Movies, R).
 
 mostFrequentDirector([], ''):- !.
 mostFrequentDirector(Movies, R):- mostFrequent('Diretor', Movies, R).
+
+getBestMoviesByGenre(Genero, Saida):-
+    getMovieByGenre(Genero, Filmes),
+    merge_sort(Filmes, FilmesOrdenados),
+    take(FilmesOrdenados, 10, Saida).
+
+recomendaMovies(Favoritos, _, Saida):-
+    mostFrequentGender(Favoritos, Genero1),
+    secondMostFrequentGender(Favoritos, Genero2),
+    getMovieByGenre(Genero1, Temp1),
+    getMovieByGenreAux(Temp1, Genero2, Temp2),
+    merge_sort(Temp2, FilmesOrdenados),
+    take(FilmesOrdenados, 10, Saida).
+
