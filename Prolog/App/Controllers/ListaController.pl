@@ -48,12 +48,13 @@ editListaAux([H|T], ID, Nome, Filmes, [H|Out]):- editListaAux(T, ID, Nome, Filme
 
 appendMovieToLista(IdLista, row(ID, _, _, _, _, _, _, _)):-
     getLista(IdLista, row(IdLista, Nome, Filmes)),
-    splitNumbers(Filmes, ListaFilmes),
-    (not(member(ID, ListaFilmes)) -> 
-    append([Filmes], [ID], R),
-    atomic_list_concat(R, ',', NovosFilmes),
-    editLista(IdLista, Nome, NovosFilmes);
-    sleep(0.01)).
+    (Filmes = '' -> editLista(IdLista, Nome, ID);
+        splitNumbers(Filmes, ListaFilmes),
+        (not(member(ID, ListaFilmes)) -> 
+            append([Filmes], [ID], R),
+            atomic_list_concat(R, ',', NovosFilmes),
+            editLista(IdLista, Nome, NovosFilmes);
+            sleep(0.01))).
 
 removeMovieFromLista(IdLista, row(ID, _, _, _, _, _, _, _)):-
     getLista(IdLista, row(IdLista, Nome, Filmes)),
@@ -63,12 +64,20 @@ removeMovieFromLista(IdLista, row(ID, _, _, _, _, _, _, _)):-
     editLista(IdLista, Nome, NovosFilmes);
     sleep(0.01)).
 
+exibeLista(row(_, Nome, ''), Resposta):-
+    Lista = [   '=========================================\n',
+                '      ', Nome, '\n',
+                '=========================================\n',
+                'Você não possui nenhum filme!'            
+            ],
+    atomic_list_concat(Lista, '', Resposta).
+
 exibeLista(row(_, Nome, Filmes), Resposta):-
     splitNumbers(Filmes, ListaFilmes),
     getMoviesByIds(ListaFilmes, Movies),
     showMovies(Movies, 1, StringMovies),
     Lista = [   '=========================================\n',
-                '      Filmes de ', Nome, '\n',
+                '      ', Nome, '\n',
                 '=========================================\n',
                 StringMovies            
             ],

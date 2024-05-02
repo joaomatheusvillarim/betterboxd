@@ -55,6 +55,91 @@ optionsMenuPrincipal('S', _):- write(''), !.
 optionsMenuPrincipal('s', _):- write(''), !.
 optionsMenuPrincipal(_, _) :- writeln('Opção inválida!'),sleep(1.5), menuPrincipal.
 
+menuBusca1:-
+    lerArquivo('MenuBusca1.txt'),
+    getAtom('Selecione uma opção: ', Opcao),
+    optionsMenuBusca1(Opcao).
+
+optionsMenuBusca1('F'):- menuBuscaFilme1,!.
+optionsMenuBusca1('f'):- menuBuscaFilme1,!.
+optionsMenuBusca1('P'):- menuBuscaPerfil,!.
+optionsMenuBusca1('p'):- menuBuscaPerfil,!.
+optionsMenuBusca1('V'):- menuPrincipal, !.
+optionsMenuBusca1('v'):- menuPrincipal, !.
+optionsMenuBusca1(_) :- writeln('Opção inválida!'),sleep(1.5), menuPrincipal.
+
+menuBuscaPerfil:-
+    lerArquivo('logo.txt'),
+    getUsers(Users),
+    writeln('========================================='),
+    exibeUsuarios(T),
+    writeln(T),
+    writeln('========================================='),
+    getInt('Id: ', Id),
+    menuBuscaPerfil2(Id, Users).
+
+menuBuscaPerfil2(Id,Users):-
+    length(Users, T),
+    (Id > 0, Id < T ->
+        nth1(Id,Users,UserEscolhido),
+        getUserLogged(row(Id2, _, _, _, _, _)),
+        ( Id = Id2 ->
+            menuPerfil(UserEscolhido)
+            ;
+            lerArquivo('logo.txt'),
+            exibePerfil(UserEscolhido, R32),
+            writeln(R32),
+            writeln(''),
+            writeln('(S)ELECIONAR Lista'),
+            writeln('(R)ECOMENDAR Filme'),
+            writeln('(V)OLTAR'),
+            nl,
+            getAtom('Selecione uma opção: ', UserChoice),
+            menuBuscaPerfil2Options(UserChoice,UserEscolhido)
+        )
+    ;
+        nl,
+        write('Index inválido'),sleep(1.5),
+        menuBuscaPerfil
+    ).
+
+menuBuscaPerfil2Options('S',User):- menuSelecaoListaBusca(User),!.
+menuBuscaPerfil2Options('s',User):- menuSelecaoListaBusca(User),!.
+menuBuscaPerfil2Options('R',User):- menuPerfilRecomendacao(User),!.
+menuBuscaPerfil2Options('r',User):- menuPerfilRecomendacao(User),!.
+menuBuscaPerfil2Options('V',_):- menuPrincipal,!.
+menuBuscaPerfil2Options('v',_):- menuPrincipal,!.
+menuBuscaPerfil2Options(_,_):- writeln('Opção Inválida!'),sleep(1.5),menuBuscaPerfil,!.    
+
+% CONTINUAR AQUI.
+
+menuBuscaFilme1():-
+    lerArquivo('MenuBuscaFilme.txt'),
+    getString(' ', UserChoice),
+    menuBuscaFilme2(UserChoice).
+
+menuBuscaFilme2(UserChoice):-
+    getMovieByTitle(UserChoice,Movies),
+    length(Movies,Tamanho),
+
+    (Tamanho < 1 ->
+        write('Nenhum retorno válido'),sleep(1.5),
+        menuBuscaFilme1()
+    ;
+    showMovies(Movies,1,FilmesSTR),
+        lerArquivo('MenuBuscaFilme2.txt'),
+        writeln(FilmesSTR),
+        getInt('Id: ', Id),
+        (Id < 1 ; Id > Tamanho -> writeln('ERROR: Index invalido'),sleep(1.5), menuBuscaFilme2(UserChoice);
+            nth1(Id, Movies, Resposta),
+            menuFilme(Resposta)
+        ;
+            nl,
+            writeln('Index inválido'),sleep(1.5),
+            menuBuscaFilme2(UserChoice)
+        )
+    ).
+
 menuPerfil(User):-
     lerArquivo('logo.txt'),
     exibePerfil(User, R),
@@ -105,7 +190,7 @@ menuSelecaoLista2(User, Lista):-
     lerArquivo('logo.txt'),
     exibeLista(Lista, E),
     writeln(E),
-    writeNvezes(41,'='),
+    writeln('========================================='),
     writeln('(A)DICIONAR Filme'),
     writeln('(S)ELECIONAR Filme'),
     writeln('(R)EMOVER Filme'),
@@ -119,6 +204,109 @@ menuSelecaoLista2Options(User, Lista, 'S'):- menuSelecionaFilme(User, Lista), !.
 menuSelecaoLista2Options(User, Lista, 's'):- menuSelecionaFilme(User, Lista), !.
 menuSelecaoLista2Options(User, Lista, 'R'):- menuRemoveFilmeLista(User, Lista), !.
 menuSelecaoLista2Options(User, Lista, 'r'):- menuRemoveFilmeLista(User, Lista), !.
-menuSelecaoLista2Options(User, Lista, 'V'):- menuPrincipal(), !.
-menuSelecaoLista2Options(User, Lista, 'v'):- menuPrincipal(), !.
+menuSelecaoLista2Options(_, _, 'V'):- menuPrincipal(), !.
+menuSelecaoLista2Options(_, _, 'v'):- menuPrincipal(), !.
 menuSelecaoLista2Options(User, Lista, _):- writeln('Opção inválida!'),sleep(1.5), menuSelecaoLista2(User, Lista), !.
+
+menuBuscaFilmeLista(User, Lista):- 
+    lerArquivo('MenuBuscaFilme.txt'),
+    getString(' ', UserChoice),
+    menuBuscaFilme2Lista(User, Lista, UserChoice).
+
+menuBuscaFilme2Lista(User, row(IDLista, _, _), UserChoice):-
+    getMovieByTitle(UserChoice,Movies),
+    length(Movies, Tamanho),
+
+    (Tamanho < 1 -> writeln('Nenhum retorno válido, voltando ao Menu Principal'),sleep(1.5), menuPrincipal() ;
+        showMovies(Movies, 1, R),
+        lerArquivo('MenuBuscaFilme2.txt'),
+        writeln(R),
+        getInt('Id: ', Id),
+        (Id < 1 ; Id > Tamanho -> writeln('ERROR: Index invalido'),sleep(1.5), menuBuscaFilme2Lista(User, row(IDLista, _, _), UserChoice);
+            nth1(Id, Movies, Resposta),
+            appendMovieToLista(IDLista, Resposta),
+            getLista(IDLista, NovaLista),
+            menuSelecaoLista2(User, NovaLista)
+        )
+    ).
+
+menuSelecionaFilme(_, row(_, _, '')):-
+    writeln('Lista Vazia, retornando ao Menu Principal'),
+    sleep(1.5),
+    menuPrincipal, !.
+
+menuSelecionaFilme(User, row(IDLista, Nome, Filmes)):-
+    splitNumbers(Filmes, ListaFilmes),
+    getMoviesByIds(ListaFilmes, Movies),
+    length(Movies,Tamanho),
+    (Tamanho = 0 ->
+        nl,
+        writeln('Lista Vazia, retornando ao Menu Principal'),
+        sleep(1.5),
+        menuPrincipal
+    ;
+        getInt('Id: ', Id),
+        (Id < 1 ; Id > Tamanho->
+            nl,
+            writeln('Index inválido'),
+            sleep(1.5),
+            menuSelecionaFIlme(User,row(IDLista, Nome, Filmes))
+        ;
+            Indice is Id -1,
+            nth0(Indice,Movies,Info),
+            menuFilme(Info)
+        )
+    ).
+
+menuFilme(Movie):-
+    movieInfo(Movie, R),
+    write(R),
+    writeln('(C)OMENTAR e avaliar filme'),
+    writeln('(A)LTERAR comentário'),
+    writeln('(V)OLTAR ao menu principal'),
+    getAtom('Selecione uma opção: ', UserChoice),
+    optionsMenuFilme(Movie, UserChoice).
+
+optionsMenuFilme(Movie, 'C'):- menuComentario(Movie), !.
+optionsMenuFilme(Movie, 'c'):- menuComentario(Movie), !.
+optionsMenuFilme(Movie, 'A'):- menuComentarioChange(Movie), !.
+optionsMenuFilme(Movie, 'a'):- menuComentarioChange(Movie), !.
+optionsMenuFilme(_, 'V'):- menuPrincipal(),!.
+optionsMenuFilme(_, 'v'):- menuPrincipal(),!.
+optionsMenuFilme(Movie, _ ):- writeln('Opção Inválida!'),sleep(1.5), menuFilme(Movie),!.
+
+menuComentario(Movie):-
+    Movie = row(IDMovie, _, _, _, _, _, _, _),
+    getUserLogged(User),
+    User = row(IdUser, _, _, _, _, _),
+    (not(hasComment(IdUser, IDMovie)) -> comentaFilme(User, Movie);
+        writeln('Você já avaliou este filme!'),
+        sleep(1),
+        menuFilme(Movie)
+    ).
+
+comentaFilme(User, Movie):-
+    User = row(IdUser, _, _, _, _, _),
+    Movie = row(IDMovie, _, _, _, _, _, _, _),
+    getNumberStars(S),
+    getComentario(C),
+    appendComentario(IdUser, IDMovie, S, C),
+    getMovie(IDMovie, NewM),
+    menuFilme(NewM).
+
+menuComentarioChange(Movie):-
+    getUserLogged(User),
+    User = row(IdUser, _, _, _, _, _),
+    Movie = row(IDMovie, _, _, _, _, _, _, _),
+    (hasComment(IdUser, IDMovie) -> changeComentFilme(User, Movie);
+        whiteln('Você ainda não avaliou este filme!'),
+        menuFilme(Movie)
+    ).
+
+changeComentFilme(User, Movie):-
+    User = row(IdUser, _, _, _, _, _),
+    Movie = row(IDMovie, _, _, _, _, _, _, _),
+    getNumberStars(S),
+    getComentario(C),
+    editComment(IdUser, IDMovie, S, C),
+    menuFilme(Movie).

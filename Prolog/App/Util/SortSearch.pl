@@ -1,5 +1,12 @@
 :-consult('StringsOP.pl').
 
+take([X], P, [X]):- P > 0, !.
+take(_, 0, []):- !.
+take([X|Xs], N, [X|Ys]):-
+    N > 0,
+    N1 is N - 1,
+    take(Xs, N1, Ys), !.
+
 merge([],[],_):- !.
 merge(L,[],L):- !.
 merge([],R,R):- !.

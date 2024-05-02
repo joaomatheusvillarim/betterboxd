@@ -20,7 +20,8 @@ editMovieAux([H|T], ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comenta
 
 getMovieByTitle(Titulo, Resposta):-
     getMovies(Movies),
-    getMovieByTittleAux(Movies, Titulo, Resposta).
+    getMovieByTittleAux(Movies, Titulo, Temp),
+    take(Temp, 10, Resposta).
 
 getMovieByTittleAux([], _, []).
 getMovieByTittleAux([row(ID, Titulo, Rating, Generos, Ano, Atores, Diretores, Comentarios)|T], TituloBuscado, Resposta):-

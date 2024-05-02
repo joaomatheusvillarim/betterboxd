@@ -4,7 +4,7 @@ getString(Message, Input) :-
 
 getInt(Message, Input):-
     getAtom(Message, Temp),
-    (atom_number(Temp, N) -> Input = N; writeln('Opção inválida'),sleep(0.8),getInt(Message, Input)).
+    (atom_number(Temp, N) -> Input = N, N > 0; writeln('Opção inválida'),sleep(0.8),getInt(Message, Input)).
 
 getAtom(Message, Input) :-
     write(Message),
@@ -33,3 +33,14 @@ getUsernameLogin(R):-
 getPasswordLogin(R):-
     getAtom('Digite a sua senha: ', Temp),
     (atom_number(Temp, N) -> R = N; R = Temp).
+
+getNumberStars(R):-
+    getInt('De 0 a 5 estrelas, como você avalia o filme? ', Temp),
+    (Temp < 0 ; Temp > 5 -> 
+        writeln('Aviso: Quantidade de estrelas inválidas'),
+        getNumberStars(R);
+        R = Temp    
+    ).
+
+getComentario(R):-
+    getString('Insira seu comentário: ', R).

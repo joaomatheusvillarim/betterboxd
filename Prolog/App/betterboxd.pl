@@ -33,6 +33,56 @@ criaLista(row(Id, Username, Name, Bio, Senha, IdsLista), Nome, NovoUser):-
     editUser(Id, Username, Name, Bio, Senha, Resposta),
     getUser(Id, NovoUser).
 
+media_avaliacoes([], 0, 0).
+media_avaliacoes([row(_, _, NumStar, _) | Resto], Soma, NumAvaliacoes) :-
+    media_avaliacoes(Resto, SomaResto, NumAvaliacoesResto),
+    Soma is SomaResto + NumStar,
+    NumAvaliacoes is NumAvaliacoesResto + 1.
 
+media_total_avaliacoes(Lista, Media) :-
+    media_avaliacoes(Lista, Soma, NumAvaliacoes),
+    NumAvaliacoes > 0,
+    Media is Soma / NumAvaliacoes.
+
+avaliacoes([],  ' Avaliação média: Nenhuma avalição realizada'):- !.
+avaliacoes(Lista, Str):-
+    media_total_avaliacoes(Lista, Media),
+    Temp = [' Avaliação média: ', Media, ' estrelas'],
+    atomic_list_concat(Temp, Str).
+
+comentarios([], '  - Nenhum comentário disponível.'):- !.
+comentarios(P, Str):-
+    comentariosAux(P, Lista),
+    atomic_list_concat(Lista, Str).
+
+comentariosAux([], []).
+comentariosAux([row(IdUser, _, NumStar, Comentario)|T], L):-
+    getUser(IdUser, row(IdUser, _, Name, _, _, _)),
+    comentariosAux(T, L2),
+    Temp = [' ', Name, " - ", NumStar, ' estrelas: ', Comentario, '\n'],
+    append(Temp, L2, L).
+    
+movieInfo(row(Id, Titulo, Rating, _, Ano, Atores, Diretores, _), Str):-
+    getComentariosByMovie(Id, Comentarios),
+    avaliacoes(Comentarios, Temp1),
+    comentarios(Comentarios, Temp2),
+    Lista = [
+                '********************************************************************************\n',
+                '\n',
+                '                              Informações do Filme\n',
+                '\n',
+                '********************************************************************************\n',
+                ' Título:          ', Titulo, '\n',
+                ' Rating:          ', Rating, '\n',
+                Temp1, '\n',
+                ' Ano:             ', Ano, '\n',
+                ' Atores:          ', Atores, '\n',
+                ' Diretor:         ', Diretores, '\n',
+                '********************************************************************************\n',
+                ' Comentários:\n',
+                Temp2, '\n',
+                '********************************************************************************\n'
+    ],
+    atomic_list_concat(Lista, Str).
 
 
