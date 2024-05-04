@@ -1,6 +1,11 @@
 :- set_prolog_flag(encoding, utf8).
 
+limpaTela():-
+    Temp = '\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n',
+    writeln(Temp).
+
 lerArquivo(NomeArquivo) :-
+    limpaTela,
     atom_concat('App/Menus/MenusTxt/', NomeArquivo, NovoCaminho),
     open(NovoCaminho, read, Stream),
     lerLinhas(Stream),
