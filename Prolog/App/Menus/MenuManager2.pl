@@ -5,6 +5,7 @@
 :- consult('App/Controllers/ListaController.pl').
 :- consult('App/Controllers/UserController.pl').
 :- consult('App/Controllers/MovieController.pl').
+:- consult('App/Menus/LeTxt.pl').
 
 menuInicial :-
     lerArquivo('MenuInicial.txt'),
@@ -322,6 +323,7 @@ menuSelecionaFilme(User, row(IDLista, Nome, Filmes)):-
     ).
 
 menuFilme(Movie):-
+    limpaTela,
     movieInfo(Movie, R),
     write(R),
     writeln('(C)OMENTAR e avaliar filme'),
