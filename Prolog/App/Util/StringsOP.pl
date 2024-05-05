@@ -17,6 +17,7 @@ stringToList2(String, Lista) :-
     atomic_list_concat(Atoms, ',', SemColchetes),
     maplist(atom_string, Lista, Atoms).
 
+splitNumbers('', []).
 splitNumbers(String, Lista) :-
     atomic_list_concat(Atoms, ',', String),
     maplist(atom_string, Atoms, Strings),
