@@ -91,7 +91,7 @@ exibeEstatisticas(row(_, _, _, _, _, IdsLista), Str):-
     getMoviesByIds(Temp1, Favoritos),
     splitNumbers(AssistidosStr, Temp2),
     getMoviesByIds(Temp2, Assistidos),
-    append(Favoritos, Assistidos, Total),
+    union(Favoritos, Assistidos, Total),
     length(Total, N),
     mostFrequentGender(Total, G),
     mostFrequentActor(Total, A),
