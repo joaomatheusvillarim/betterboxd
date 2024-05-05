@@ -82,10 +82,13 @@ menuBuscaPerfil:-
 
 menuBuscaPerfil2(Id,Users):-
     length(Users, T),
-    (Id > 0, Id < T ->
+    Tamanho is T + 1,
+    (Id > 0, Id < Tamanho ->
+        writeln('debugging 2'),
         nth1(Id,Users,UserEscolhido),
         getUserLogged(row(Id2, _, _, _, _, _)),
         ( Id = Id2 ->
+            writeln('debugging 1'),
             menuPerfil(UserEscolhido)
             ;
             lerArquivo('logo.txt'),
@@ -361,7 +364,7 @@ menuComentarioChange(Movie):-
     User = row(IdUser, _, _, _, _, _),
     Movie = row(IDMovie, _, _, _, _, _, _, _),
     (hasComment(IdUser, IDMovie) -> changeComentFilme(User, Movie);
-        whiteln('Você ainda não avaliou este filme!'),
+        writeln('Você ainda não avaliou este filme!'),
         menuFilme(Movie)
     ).
 
