@@ -84,11 +84,9 @@ menuBuscaPerfil2(Id,Users):-
     length(Users, T),
     Tamanho is T + 1,
     (Id > 0, Id < Tamanho ->
-        writeln('debugging 2'),
         nth1(Id,Users,UserEscolhido),
         getUserLogged(row(Id2, _, _, _, _, _)),
         ( Id = Id2 ->
-            writeln('debugging 1'),
             menuPerfil(UserEscolhido)
             ;
             lerArquivo('logo.txt'),
