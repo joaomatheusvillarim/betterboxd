@@ -486,7 +486,6 @@ menuRecomendacaoTop10Exibicao(User, Top10):-
     length(Top10, Tamanho),
     (UserChoice < 1 ; UserChoice > Tamanho -> writeln('Error, id invalido'), sleep(1.5), menuRecomendacaoTop10(User);
         nth1(UserChoice, Top10, FilmeEscolhido),
-        movieInfo(FilmeEscolhido, Informacao),
         menuFilme(FilmeEscolhido)).
 
 menuRecomendacoesPersonalizadas(User):-
