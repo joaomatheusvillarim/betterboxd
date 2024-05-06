@@ -2,6 +2,8 @@
 Betterboxd - Projeto de PLP
 O Betterboxd é uma plataforma para avaliar filmes, obter recomendações, organizar watchlists, e interagir com seus amigos sobre os filmes vistos recentemente. Diferentemente do site no qual foi inspirado - o Letterboxd -, o Betterboxd oferece ao usuário estatísticas sobre os seus gostos cinematográficos e “perfil” como cinéfilo.
 
+#Instalação
+Execute o arquivo, de acordo com sua respectiva linguagem (executar haskell a partir do main dentro da pasta haskell e vice-versa para prolog).
 
 ### Perfil do Usuário
 - Criar perfil
