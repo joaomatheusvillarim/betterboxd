@@ -504,7 +504,7 @@ menuRecomendacoesPersonalizadas(User):-
     (TamanhoFavoritos < 1 -> writeln('ERROR: Você não possui nenhum favorito!'), sleep(1.5), menuRecomendacao(User) ;
         recomendaMovies(Favoritos, Assistidos, Recomendados),
         length(Recomendados, TamanhoRecomendados),
-        (TamanhoRecomendados < 1 -> writeln('Nenhum filme encontrado, retornando ao Menu Principal.'), sleep(1.5), menuPrincipal();
+        (TamanhoRecomendados < 1 -> writeln('Nenhum filme encontrado, adicione mais filmes a lista de Favoritos!\nRetornando ao Menu Principal.'), sleep(1.5), menuPrincipal();
             showMovies(Recomendados,1, Exibir),
             writeln(Exibir),
             getInt('Id: ', Id),

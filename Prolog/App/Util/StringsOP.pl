@@ -1,4 +1,6 @@
 isSubstring(Small, Big):- 
+    nonvar(Small),
+    nonvar(Big),
     string_lower(Small, SmallLower), 
     string_lower(Big, BigLower),    
     string_chars(SmallLower, R1), 

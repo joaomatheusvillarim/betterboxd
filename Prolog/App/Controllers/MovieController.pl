@@ -105,5 +105,7 @@ recomendaMovies(Favoritos, _, Saida):-
     getMovieByGenre(Genero1, Temp1),
     getMovieByGenreAux(Temp1, Genero2, Temp2),
     merge_sort(Temp2, FilmesOrdenados),
-    take(FilmesOrdenados, 10, Saida).
+    take(FilmesOrdenados, 10, Temp4),
+    (Temp4 = [Temp5 | _], not(nonvar(Temp5)) -> Saida = [] ;
+        Saida = Temp4).
 
